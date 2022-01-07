@@ -1,18 +1,13 @@
 package com.example.mybotv2;
 
-import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +17,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.mybotv2.classMne.Comandos;
 import com.example.mybotv2.classMne.Constants;
-import com.example.mybotv2.classMne.LobosCampesinos;
 import com.example.mybotv2.classMne.TTSManager;
 
 import org.json.JSONArray;
@@ -44,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
     TextView grabar, respuesta;
     ImageButton img_btn_hablar;
 
-    int numeroComandos, contador = 0, lobosCampesinos = 0, cantidad = 0, lobosGuardar = 0,
-            conteo = 0;
+    int numeroComandos, contador = 0;
     String strSpeech2Text = "", textoRepetido = "";
     final String[] diasSemana = new String[9];
     boolean isGreeting, isGoodbyes, confirmacion, leyendo = false;
@@ -55,17 +48,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> saludosBot = new ArrayList<>();
     ArrayList<String> despedidas = new ArrayList<>();
     ArrayList<Comandos> listaComandos = new ArrayList<>();
-    ArrayList<String> nombreJugadores = new ArrayList<>();
-    ArrayList<Integer> rolesJugadores = new ArrayList<>();
 
     Random rand = new Random();
 
     private static final int REQ_CODE_SPEECH_INPUT = 1;
     TTSManager ttsManager = null;
-    Integer picWolf = R.drawable.lobo;
-    Integer picFarmer = R.drawable.campesino;
-    Integer picMic = R.drawable.microfono;
-    LobosCampesinos lc = new LobosCampesinos();
 
     /* Los mensajes para que el bot sepa que es un saludo y que es una despedida y que responder */
     {
@@ -167,11 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Constants.URL_COMAND_NON_EXIST_INSERT, Constants.URL_COMAND_NON_EXIST_SELECT},
                 new String[]{"intentcomand", "", "description", "", "whosuggestion", "", "datasuggestion", ""}));
 
-        listaComandos.add(new Comandos(11,
-                new String[]{"Lobos", "Campesinos", "Lobo", "Campesino"},
-                "Si dices alguna de las palabras lobos ó campesinos iniciarás el juego" +
-                        " de los lobos y campesinos"));
-
         numeroComandos = listaComandos.size();
     }
 
@@ -236,11 +218,6 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(lobosCampesinos != 0){
-                    juegoLobosCampesinos();
-                    return;
-                }
-
                 if(leyendo){
                     if(strSpeech2Text.toLowerCase().contains("can") || strSpeech2Text.toLowerCase().contains("olv")){
                         resetearDatos("Ok. Cancelado");
@@ -287,121 +264,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    public void
-    juegoLobosCampesinos(){
-        if(lobosCampesinos == 10){
-
-        }
-
-        if(lobosCampesinos == 9){
-            if(strSpeech2Text.contains("otra vez")){
-                lobosCampesinos = 7;
-            }else{
-                lobosCampesinos = 0;
-            }
-        }
-
-        if(lobosCampesinos == 8){
-
-                conteo++;
-            try{
-                ttsManager.addQueue(nombreJugadores.get(conteo));
-                grabar.setText(nombreJugadores.get(conteo));
-                }catch(Exception ignored){
-
-                }
-
-
-            if(conteo == cantidad-1){
-                Thread hilo = new Hilo2();
-                hilo.start();
-                try { Thread.sleep(6000);
-                    img_btn_hablar.setImageResource(picMic);
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e + "", Toast.LENGTH_LONG).show();
-                }
-                ttsManager.addQueue("Si van a jugar otra vez los mismos solo di: jugar otra vez");
-                lobosCampesinos = 9;
-            }else{
-                //conteo++;
-                Thread hilo = new Hilo2();
-                hilo.start();
-            }
-        }
-
-        if(lobosCampesinos == 7){
-            int lobos = lobosGuardar;
-            int campesinos = cantidad - lobos;
-            rolesJugadores = lc.asignarRoles(lobos, campesinos);
-            lobosCampesinos = 8;
-            conteo = -1;
-            juegoLobosCampesinos();
-        }
-
-        if(lobosCampesinos == 6){
-            int lobos = Integer.parseInt(strSpeech2Text);
-            lobosGuardar = lobos;
-            lobosCampesinos = 7;
-            juegoLobosCampesinos();
-        }
-
-        if(lobosCampesinos == 5){
-            ttsManager.addQueue("¿Cúantos lobos son?");
-            try { //noinspection BusyWait
-                Thread.sleep(2000); } catch (Exception ignored) { }
-            lobosCampesinos = 6;
-            iniciarEntradaVoz();
-        }
-
-        if(lobosCampesinos == 4){
-            nombreJugadores.add(strSpeech2Text);
-            ArrayList<String> nombreJugadoresTemp = new ArrayList<>();
-            nombreJugadoresTemp = lc.correrInicioLista(nombreJugadores);
-            nombreJugadores = new ArrayList<>();
-            nombreJugadores = nombreJugadoresTemp;
-            lobosCampesinos = 5;
-            juegoLobosCampesinos();
-        }
-
-        if(lobosCampesinos == 3){
-            ttsManager.addQueue("Jugador " + conteo);
-            try { //noinspection BusyWait
-                Thread.sleep(2000); } catch (Exception ignored) { }
-            iniciarEntradaVoz();
-
-            try { //noinspection BusyWait
-                Thread.sleep(4000); } catch (Exception ignored) { }
-
-            if(conteo > 1) nombreJugadores.add(strSpeech2Text);
-            if(cantidad == nombreJugadores.size()+1){
-                lobosCampesinos = 4;
-            }
-            conteo++;
-        }
-
-        if(lobosCampesinos == 2){
-            cantidad = Integer.parseInt(strSpeech2Text);
-            lc.setnPlayers(cantidad);
-            lobosCampesinos = 3;
-            conteo = 1;
-            juegoLobosCampesinos();
-        }
-
-        if(lobosCampesinos == 1){
-            ttsManager.addQueue("¿Cúantos van a jugar?");
-            try { //noinspection BusyWait
-                Thread.sleep(2000); } catch (Exception ignored) { }
-            lobosCampesinos = 2;
-            iniciarEntradaVoz();
-            try { //noinspection BusyWait
-                Thread.sleep(3000); } catch (Exception ignored) { }
-        }
-    }
-
-    private Integer putNameAndImage(int ins){
-        return ins == 1 ? picWolf : picFarmer;
     }
 
     public void resetearDatos(String texto)
@@ -567,9 +429,7 @@ public class MainActivity extends AppCompatActivity {
             case 10:
                 comandoSugerirComandos(comando, texto);
                 break;
-            case 11:
-                comandoLobosCampesinos();
-                break;
+
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
                 posteriormente lo guarda en la base de datos de las ideas de los usuarios y si
@@ -778,11 +638,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoLobosCampesinos(){
-        lobosCampesinos = 1;
-        juegoLobosCampesinos();
-    }
-
     public void comandoCosasToDo(Comandos c, String texto){
         //String dia = tomarDiaSeleccionado(texto);
         solicitarDatosNecesarios(c);
@@ -960,8 +815,9 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             // your code to update the UI thread here
         }
-    });*/
+    });
 
+    SIRVE PARA PONER UNA IMAGEN DESDE UN HILO
     class Hilo2 extends Thread {
         @Override
         public void run() {
@@ -974,12 +830,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 Thread.sleep(6000);
-                juegoLobosCampesinos();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    El cual se llama así:
+
+    Thread hilo = new Hilo2();
+    hilo.start();
+
+    */
 
 
     /**
