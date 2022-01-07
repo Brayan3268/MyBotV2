@@ -1,0 +1,167 @@
+/*With this code we can obtain Json arrays for the list of objects*/
+
+/*JSONArray arrayUsuario = response.getJSONArray("data");
+for(int i = 0; i < objectUser.length(); i++){
+    JSONObject jo = arrayUsuario.getJSONObject(i);
+
+    JSONObject objectUser = response.getJSONObject("data");
+    String emailBD = objectUser.getString("email");
+    String passBD = objectUser.getString("pass");
+}*/
+
+
+
+/*
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {String etDon = etDoN.getText().toString();
+                dwn++;
+                if(dwn > 6) dwn = 0;
+                tvDayNow.setText(dow.get(dwn) + "");
+                if (etDon.equalsIgnoreCase("dia") || etDon.equalsIgnoreCase("noche")) {
+                    if (etHourStart.getText().toString().equals("") || etHourOut.getText().toString().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Todos los campos deben de estar llenos para continuar", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (day < daysForWorked) {
+                            day++;
+                            dayOfStart++;
+                            if(dayOfStart > (maxDays - 1)){
+                                d = dayOfStart - 1;
+                                dayOfStart = 1;
+                                m2++;
+                                etMonth.setText(months.get(m2));
+                            }
+                            tvNumber.setText(dayOfStart + "");
+                            if (val >= maxVal && val < don.length && !(etHourStart.getText().toString().equals(""))
+                                    && !(etHourOut.getText().toString().equals(""))) {
+                                don[val] = etDoN.getText().toString();
+                                hoursS[val] = Integer.valueOf(etHourStart.getText().toString());
+                                hoursO[val] = Integer.valueOf(etHourOut.getText().toString());
+                                val++;
+                                maxVal = (val - 1);
+                                etDoN.setText("");
+                                etHourStart.setText("");
+                                etHourOut.setText("");
+                                if ((day - 1) == (daysForWorked - 1)) {
+                                    Toast.makeText(getApplicationContext(), "Ya llenaste todos los días, " +
+                                            "Rectifica si deseas, y continua por favor.", Toast.LENGTH_LONG).show();
+                                    tvNumber.setText("Fin");
+                                    btnContinue1.setVisibility(View.VISIBLE);
+                                    etDoN.setText("");
+                                    etHourStart.setText("");
+                                    etHourOut.setText("");
+                                    etDoN.setVisibility(View.INVISIBLE);
+                                    etHourStart.setVisibility(View.INVISIBLE);
+                                    etHourOut.setVisibility(View.INVISIBLE);
+                                }
+                            } else {
+                                val++;
+                                if (!(don[val] == null && hoursS[val] == 0 && hoursO[val] == 0)) {
+                                    etDoN.setText(don[val] + "");
+                                    etHourStart.setText(hoursS[val] + "");
+                                    etHourOut.setText(hoursO[val] + "");
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Digite en el primer campo 'dia' y/o 'noche' unicamente", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+ */
+
+
+//HORAS MILITARES Y COMPLETAS
+//AGREGAR SI EL DIA ES FESTIVO O NO
+
+
+//06:01 - 20:59 DIA
+//21:00 - 05:59 NOCHE
+
+
+//Bioshock 1 rap keyblade
+//Watch dogs 1 rap
+
+
+
+
+
+
+
+
+package com.example.minomina.classMne;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+/**
+ * Class fot the utilization of the data base
+ */
+public class DbHelper extends SQLiteOpenHelper {
+
+    //Table that save of dates of each user
+    String tableDates = "Create Table Dates(User Text Primary Key, Hour Integer, Basic Integer, nightSurcharge Integer, festiveSurcharge Integer, " +
+            "transportationSubsidy Integer, deductionpensionHealth Integer)";
+
+    public DbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) { super(context, name, factory, version); }
+
+    @Override public void onCreate(SQLiteDatabase db) { db.execSQL(tableDates); }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("drop table Dates");
+        db.execSQL(tableDates);
+    }
+
+}
+
+
+
+
+MAIN ENTER DATA IN THE METHOD: isDataSelected()
+
+                /*datos[2] = temp.getString("hournight");
+                datos[3] = temp.getString("extrahourday");
+                datos[4] = temp.getString("extrahournight");
+                datos[5] = temp.getString("hourholidayday");
+                datos[6] = temp.getString("hourholidaynight");
+                datos[7] = temp.getString("extrahourholidayday");
+                datos[8] = temp.getString("extrahourholidaynight");*/
+
+
+
+
+
+
+        progressDialog = new ProgressDialog(this);
+        //progressDialog.setMessage("Procesando....");
+        progressDialog.setTitle("Cargando");
+        progressDialog.setCancelable (false);
+        progressDialog.setCanceledOnTouchOutside(false);
+
+        progressDialog.setMessage("Buscando tus listas de datos");
+        progressDialog.show();
+
+
+
+
+     /**Code TODO the button of the phone for back
+    @Override
+    public void onBackPressed() {
+        //startActivity(new Intent(getApplicationContext(), MainPassed.class));
+        super.onBackPressed();
+    }
+
+
+    MainResult:
+
+    /*
+    int hourForDayStart = 6;
+        int hourForDayOut = 21;
+        int hourForNightStart = 21;
+        int hourForNightOut = 6;
+
+     */
