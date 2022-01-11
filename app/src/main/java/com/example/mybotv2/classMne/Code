@@ -165,3 +165,77 @@ MAIN ENTER DATA IN THE METHOD: isDataSelected()
         int hourForNightOut = 6;
 
      */
+
+
+
+             /*@SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+             Date d = new Date();
+             String dayOfTheWeek = sdf.format(d);
+     */
+
+
+
+
+
+
+
+
+     /*runOnUiThread(new Runnable() {
+             public void run() {
+                 // your code to update the UI thread here
+             }
+         });
+
+         SIRVE PARA PONER UNA IMAGEN DESDE UN HILO
+         class Hilo2 extends Thread {
+             @Override
+             public void run() {
+                 try {
+                     img_btn_hablar.post(new Runnable() {
+                         public void run() {
+                             try {
+                                 img_btn_hablar.setImageResource(putNameAndImage(rolesJugadores.get(conteo)));
+                             }catch(Exception ignored){}
+                         }
+                     });
+                     Thread.sleep(6000);
+                 } catch (InterruptedException e) {
+                     e.printStackTrace();
+                 }
+             }
+         }
+
+         El cual se llama así:
+
+         Thread hilo = new Hilo2();
+         hilo.start();
+
+         */
+
+
+
+
+
+
+        //String fecha = "El día de hoy es " + df.format(c.getTime());
+
+        /*Calendar c = Calendar.getInstance();
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss");*/
+
+
+
+
+
+        /*public void onClick(View v) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        // a potentially time consuming task
+                        ivRol.post(new Runnable() {
+                            public void run() {
+                                ivRol.setImageResource();
+                            }
+                        });
+                    }
+                }).start();
+            }*/

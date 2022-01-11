@@ -11,6 +11,9 @@
       <w>actualmente</w>
       <w>además</w>
       <w>adiós</w>
+      <w>agradecer</w>
+      <w>agradecimiento</w>
+      <w>agradecimientos</w>
       <w>agrega</w>
       <w>agregar</w>
       <w>ahora</w>
@@ -37,11 +40,13 @@
       <w>buenas</w>
       <w>buenos</w>
       <w>buscando</w>
+      <w>buscar</w>
       <w>cada</w>
       <w>calendario</w>
       <w>cambio</w>
       <w>campesino</w>
       <w>campesinos</w>
+      <w>cancela</w>
       <w>cancelado</w>
       <w>cancelar</w>
       <w>cantidad</w>
@@ -49,6 +54,7 @@
       <w>chau</w>
       <w>ciclo</w>
       <w>cierra</w>
+      <w>claro</w>
       <w>clase</w>
       <w>claves</w>
       <w>coincidencias</w>
@@ -63,6 +69,7 @@
       <w>confirma</w>
       <w>confirmacion</w>
       <w>confirmación</w>
+      <w>confirmar</w>
       <w>consulta</w>
       <w>consultar</w>
       <w>contador</w>
@@ -91,6 +98,7 @@
       <w>decir</w>
       <w>decirla</w>
       <w>decirle</w>
+      <w>dejar</w>
       <w>demás</w>
       <w>dependiendo</w>
       <w>desarrollado</w>
@@ -120,9 +128,11 @@
       <w>empezar</w>
       <w>entonces</w>
       <w>entrada</w>
+      <w>entró</w>
       <w>envía</w>
       <w>escuchar</w>
       <w>espera</w>
+      <w>esperar</w>
       <w>esperarías</w>
       <w>espero</w>
       <w>estado</w>
@@ -164,6 +174,7 @@
       <w>iniciarás</w>
       <w>inicio</w>
       <w>inserta</w>
+      <w>insertada</w>
       <w>insertar</w>
       <w>insertarlos</w>
       <w>insitandolo</w>
@@ -179,6 +190,7 @@
       <w>jugador</w>
       <w>jugadores</w>
       <w>jugar</w>
+      <w>leeme</w>
       <w>leidos</w>
       <w>leyendo</w>
       <w>leyeron</w>
@@ -195,6 +207,7 @@
       <w>lobos</w>
       <w>luego</w>
       <w>lunes</w>
+      <w>léeme</w>
       <w>manejo</w>
       <w>martes</w>
       <w>mañana</w>
@@ -212,6 +225,7 @@
       <w>modales</w>
       <w>mostrar</w>
       <w>muchas</w>
+      <w>mucho</w>
       <w>método</w>
       <w>namegame</w>
       <w>namemovieorserie</w>
@@ -257,6 +271,7 @@
       <w>podras</w>
       <w>podrás</w>
       <w>podrías</w>
+      <w>porqué</w>
       <w>posible</w>
       <w>posición</w>
       <w>posteriormente</w>
@@ -264,6 +279,7 @@
       <w>primero</w>
       <w>principalmente</w>
       <w>proceso</w>
+      <w>procesos</w>
       <w>programación</w>
       <w>progreso</w>
       <w>propio</w>
@@ -271,6 +287,7 @@
       <w>pudiera</w>
       <w>pudo</w>
       <w>pueda</w>
+      <w>puedan</w>
       <w>puede</w>
       <w>puedes</w>
       <w>puedo</w>
@@ -302,6 +319,7 @@
       <w>rutas</w>
       <w>sabado</w>
       <w>sabes</w>
+      <w>salió</w>
       <w>saluda</w>
       <w>saludar</w>
       <w>saludo</w>
@@ -320,6 +338,7 @@
       <w>sobrecarga</w>
       <w>solicitado</w>
       <w>solicitar</w>
+      <w>solicitó</w>
       <w>soporta</w>
       <w>soporte</w>
       <w>subir</w>
@@ -352,6 +371,7 @@
       <w>typems</w>
       <w>título</w>
       <w>unicamente</w>
+      <w>usado</w>
       <w>usar</w>
       <w>usas</w>
       <w>usuario</w>
