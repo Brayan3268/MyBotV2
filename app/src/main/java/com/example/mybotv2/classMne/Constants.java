@@ -16,4 +16,14 @@ public class Constants {
     public final static String URL_THINGS_TO_DO_SELECT = URL_WEB_SERVICE + "things_to_do_SELECT.php";
     public final static String URL_COMAND_NON_EXIST_INSERT = URL_WEB_SERVICE + "comand_non_exist_INSERT.php";
     public final static String URL_COMAND_NON_EXIST_SELECT = URL_WEB_SERVICE + "comand_non_exist_SELECT.php";
+    public final static String URL_FILE_INSERT = URL_WEB_SERVICE + "file_INSERT.php";
+    public final static String URL_FILE_SELECT = URL_WEB_SERVICE + "file_SELECT.php";
+    public final static String URL_BOOKS_INSERT = URL_WEB_SERVICE + "book_INSERT.php";
+    public final static String URL_BOOKS_SELECT = URL_WEB_SERVICE + "book_SELECT.php";
+    public final static String URL_BIRTHDAY_INSERT = URL_WEB_SERVICE + "birthday_INSERT.php";
+    public final static String URL_BIRTHDAY_SELECT = URL_WEB_SERVICE + "birthday_SELECT.php";
+    public final static String URL_THINGS_TO_BUY_INSERT = URL_WEB_SERVICE + "things_to_buy_INSERT.php";
+    public final static String URL_THINGS_TO_BUY_SELECT = URL_WEB_SERVICE + "things_to_buy_SELECT.php";
+    public final static String URL_PHRASES_INSERT = URL_WEB_SERVICE + "phrase_INSERT.php";
+    public final static String URL_PHRASES_SELECT = URL_WEB_SERVICE + "phrase_SELECT.php";
 }

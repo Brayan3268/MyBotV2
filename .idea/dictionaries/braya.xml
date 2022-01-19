@@ -28,13 +28,17 @@
       <w>almacenar</w>
       <w>aplicación</w>
       <w>aquí</w>
+      <w>archivo</w>
+      <w>archivos</w>
       <w>asignar</w>
       <w>atributo</w>
+      <w>autor</w>
       <w>ayudar</w>
       <w>azar</w>
       <w>añadir</w>
       <w>bien</w>
       <w>bienvenido</w>
+      <w>bookname</w>
       <w>booleano</w>
       <w>buena</w>
       <w>buenas</w>
@@ -46,10 +50,12 @@
       <w>cambio</w>
       <w>campesino</w>
       <w>campesinos</w>
+      <w>cance</w>
       <w>cancela</w>
       <w>cancelado</w>
       <w>cancelar</w>
       <w>cantidad</w>
+      <w>categoría</w>
       <w>chao</w>
       <w>chau</w>
       <w>ciclo</w>
@@ -66,6 +72,7 @@
       <w>completa</w>
       <w>completado</w>
       <w>componentes</w>
+      <w>comprar</w>
       <w>confirma</w>
       <w>confirmacion</w>
       <w>confirmación</w>
@@ -79,9 +86,12 @@
       <w>continuar</w>
       <w>correr</w>
       <w>cosas</w>
+      <w>costo</w>
       <w>crea</w>
       <w>cual</w>
       <w>cuando</w>
+      <w>cumpleaño</w>
+      <w>cumpleaños</w>
       <w>cuántos</w>
       <w>cuídate</w>
       <w>código</w>
@@ -115,6 +125,8 @@
       <w>diferente</w>
       <w>diré</w>
       <w>dispositivo</w>
+      <w>documento</w>
+      <w>documentos</w>
       <w>días</w>
       <w>ejecución</w>
       <w>ejecuta</w>
@@ -126,6 +138,7 @@
       <w>ellos</w>
       <w>empezamos</w>
       <w>empezar</w>
+      <w>entendido</w>
       <w>entonces</w>
       <w>entrada</w>
       <w>entró</w>
@@ -137,6 +150,8 @@
       <w>espero</w>
       <w>estado</w>
       <w>este</w>
+      <w>estimado</w>
+      <w>estimatedcost</w>
       <w>está</w>
       <w>estés</w>
       <w>existe</w>
@@ -144,6 +159,8 @@
       <w>fecha</w>
       <w>finalizado</w>
       <w>finalizar</w>
+      <w>frase</w>
+      <w>frases</w>
       <w>funcionalidad</w>
       <w>funciones</w>
       <w>grabar</w>
@@ -151,7 +168,9 @@
       <w>guarda</w>
       <w>guardado</w>
       <w>guardar</w>
+      <w>guardarlo</w>
       <w>guardaré</w>
+      <w>gustado</w>
       <w>gustaria</w>
       <w>gustaría</w>
       <w>hablar</w>
@@ -164,8 +183,10 @@
       <w>hola</w>
       <w>ideadescription</w>
       <w>identificador</w>
+      <w>idforfiles</w>
       <w>imagebutton</w>
       <w>inexistente</w>
+      <w>inexistentes</w>
       <w>información</w>
       <w>ingresa</w>
       <w>ingresar</w>
@@ -190,10 +211,13 @@
       <w>jugador</w>
       <w>jugadores</w>
       <w>jugar</w>
+      <w>junto</w>
       <w>leeme</w>
       <w>leidos</w>
       <w>leyendo</w>
       <w>leyeron</w>
+      <w>leído</w>
+      <w>libro</w>
       <w>libros</w>
       <w>lindo</w>
       <w>lista</w>
@@ -226,10 +250,13 @@
       <w>mostrar</w>
       <w>muchas</w>
       <w>mucho</w>
+      <w>mybotv</w>
       <w>método</w>
+      <w>namebirthday</w>
       <w>namegame</w>
       <w>namemovieorserie</w>
       <w>nameperson</w>
+      <w>namettb</w>
       <w>necesarios</w>
       <w>necesitan</w>
       <w>ninguna</w>
@@ -248,6 +275,7 @@
       <w>otra</w>
       <w>palabra</w>
       <w>palabras</w>
+      <w>papeles</w>
       <w>parametro</w>
       <w>pasa</w>
       <w>pasar</w>
@@ -257,6 +285,8 @@
       <w>peliculas</w>
       <w>película</w>
       <w>películas</w>
+      <w>pendiente</w>
+      <w>pendientes</w>
       <w>peopleforknowhelp</w>
       <w>pequeña</w>
       <w>pero</w>
@@ -284,6 +314,7 @@
       <w>progreso</w>
       <w>propio</w>
       <w>proyectos</w>
+      <w>prueba</w>
       <w>pudiera</w>
       <w>pudo</w>
       <w>pueda</w>
@@ -291,6 +322,8 @@
       <w>puede</w>
       <w>puedes</w>
       <w>puedo</w>
+      <w>quien</w>
+      <w>quieras</w>
       <w>quiere</w>
       <w>quieres</w>
       <w>razón</w>
@@ -306,6 +339,7 @@
       <w>repetido</w>
       <w>repetirlo</w>
       <w>repitan</w>
+      <w>repites</w>
       <w>requieren</w>
       <w>rescatado</w>
       <w>rescatados</w>
@@ -325,6 +359,7 @@
       <w>saludo</w>
       <w>saludos</w>
       <w>saludó</w>
+      <w>salúdame</w>
       <w>seleccion</w>
       <w>seleccionado</w>
       <w>semana</w>
@@ -376,7 +411,9 @@
       <w>usas</w>
       <w>usuario</w>
       <w>usuarios</w>
+      <w>vacío</w>
       <w>validan</w>
+      <w>valoración</w>
       <w>vemos</w>
       <w>viernes</w>
       <w>vuelve</w>

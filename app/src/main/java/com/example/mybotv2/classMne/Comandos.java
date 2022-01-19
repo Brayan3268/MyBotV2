@@ -19,7 +19,7 @@ public class Comandos {
     private String[] datosLeerBaseDatos; //Los datos para leer una base de datos y decirla
 
     /**
-     * Constructor vacio para el manejo temprano de los objetos
+     * Constructor vacío para el manejo temprano de los objetos
      */
     public Comandos() { }
 
@@ -42,21 +42,21 @@ public class Comandos {
      * @param numeroComando El identificador del comando diferente a los demás
      * @param comando Las palabras claves para llamar al comando
      * @param descripcion La descripción del comando
-     * @param enProgreso Valor para saber si el comando está almacenando información actualmente
+     //* @param enProgreso Valor para saber si el comando está almacenando información actualmente
      * @param datosInsertarBaseDatos Los datos que se van a insertar en la base de datos
-     * @param confirmacion La confirmación por voz para saber si sí se van a insertar los datos o no
+     //* @param confirmacion La confirmación por voz para saber si sí se van a insertar los datos o no
      * @param rutas Las rutas del backend para acceder a cada base de datos
      * @param datosLeerBaseDatos Los datos que se leyeron de la base de datos
      */
-    public Comandos(int numeroComando, String[] comando, String descripcion, boolean enProgreso,
-                    String[] datosInsertarBaseDatos, boolean confirmacion, String[] rutas,
+    public Comandos(int numeroComando, String[] comando, String descripcion,
+                    String[] datosInsertarBaseDatos, String[] rutas,
                     String[] datosLeerBaseDatos) {
         this.numeroComando = numeroComando;
         this.comando = comando;
         this.descripcion = descripcion;
-        this.enProgreso = enProgreso;
+        this.enProgreso = false;
         this.datosInsertarBaseDatos = datosInsertarBaseDatos;
-        this.confirmacion = confirmacion;
+        this.confirmacion = false;
         this.rutas = rutas;
         this.datosLeerBaseDatos = datosLeerBaseDatos;
     }

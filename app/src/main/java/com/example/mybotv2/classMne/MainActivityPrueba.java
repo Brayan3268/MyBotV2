@@ -1,110 +1,208 @@
 package com.example.mybotv2.classMne;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.example.mybotv2.MainActivity;
 import com.example.mybotv2.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivityPrueba extends AppCompatActivity {
+import static android.Manifest.permission.RECORD_AUDIO;
 
-    ImageButton ib;
-    boolean speechRRunning = false;
-    String var = "n";
+public class MainActivityPrueba extends AppCompatActivity implements RecognitionListener {
+
+    private TextView returnedText;
+    private ToggleButton toggleButton;
+    private ProgressBar progressBar;
+    ImageView imageView1;
+    private SpeechRecognizer speech = null;
+    private Intent recognizerIntent;
+    private String LOG_TAG = "VoiceRecognitionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_prueba);
 
-        ib = findViewById(R.id.img_btn_hablar);
+        returnedText = (TextView) findViewById(R.id.textView1);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
+        imageView1 = (ImageView) findViewById(R.id.imageView1);
 
-        ib.setOnClickListener(new View.OnClickListener() {
+        progressBar.setVisibility(View.INVISIBLE);
+        speech = SpeechRecognizer.createSpeechRecognizer(this);
+        speech.setRecognitionListener(this);
+        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
+        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT,this.getPackageName());
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED)
+            return;
+        else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                Toast.makeText(this, "Record audio is required", Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 62);
+            }
+        }
+
+        imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                speechRRunning = true;
-                displaySpeechRecognizer();
-                //Thread hilo = new Hilo1();
-                //hilo.start();
-
-                Toast.makeText(getApplicationContext(), "Ya acabó", Toast.LENGTH_LONG).show();
-                //hilo.interrupt();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
-    }
-
-    /*class Hilo1 extends Thread {
-        @Override
-        public void run() {
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }*/
-
-    /*public void postToastMessage(final String message) {
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        handler.post(new Runnable() {
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
-            }
-        });
-    }*/
-
-
-    class Hilo1 extends Thread {
-        @Override
-        public void run() {
-            //Toast.makeText(getApplicationContext(), "Entró al hilo", Toast.LENGTH_LONG).show();
-
-            //Toast.makeText(getApplicationContext(), "Salió del speech r", Toast.LENGTH_LONG).show();
-            //Thread.sleep(6000);
-        }
-    }
-
-    // Create an intent that can start the Speech Recognizer activity
-    private void displaySpeechRecognizer() {
-        //Toast.makeText(getApplicationContext(), "Ya entró", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        // This starts the activity and populates the intent with the speech text.
-        speechResultLauncher.launch(intent);
-    }
-
-    private ActivityResultLauncher<Intent> speechResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if(result.getResultCode() == Activity.RESULT_OK){
-                    Intent data = result.getData();
-                    assert data != null;
-                    ArrayList<String> speech = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String a = speech.get(0);
-                    Toast.makeText(getApplicationContext(), a, Toast.LENGTH_LONG).show();
-                    speechRRunning = false;
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setIndeterminate(true);
+                    speech.startListening(recognizerIntent);
+                } else {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    speech.stopListening();
                 }
             }
-    );
+        });
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (speech != null) {
+            speech.destroy();
+            Log.i(LOG_TAG, "destroy");
+        }
+
+    }
+
+    @Override
+    public void onBeginningOfSpeech() {
+        Log.i(LOG_TAG, "onBeginningOfSpeech");
+        progressBar.setIndeterminate(false);
+        progressBar.setMax(10);
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+        Log.i(LOG_TAG, "onBufferReceived: " + buffer);
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+        Log.i(LOG_TAG, "onEndOfSpeech");
+        progressBar.setIndeterminate(true);
+        toggleButton.setChecked(false);
+    }
+
+    @Override
+    public void onError(int errorCode) {
+        String errorMessage = getErrorText(errorCode);
+        Log.d(LOG_TAG, "FAILED " + errorMessage);
+        returnedText.setText(errorMessage);
+        toggleButton.setChecked(false);
+    }
+
+    @Override
+    public void onEvent(int arg0, Bundle arg1) {
+        Log.i(LOG_TAG, "onEvent");
+    }
+
+    @Override
+    public void onPartialResults(Bundle arg0) {
+        Log.i(LOG_TAG, "onPartialResults");
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle arg0) {
+        Log.i(LOG_TAG, "onReadyForSpeech");
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+        Log.i(LOG_TAG, "onResults");
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String text = "";
+        for (String result : matches)
+            text += result + "\n";
+
+        returnedText.setText(text);
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+        progressBar.setProgress((int) rmsdB);
+    }
+
+    public static String getErrorText(int errorCode) {
+        String message;
+        switch (errorCode) {
+            case SpeechRecognizer.ERROR_AUDIO:
+                message = "Audio recording error";
+                break;
+            case SpeechRecognizer.ERROR_CLIENT:
+                message = "Client side error";
+                break;
+            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                message = "Insufficient permissions";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK:
+                message = "Network error";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                message = "Network timeout";
+                break;
+            case SpeechRecognizer.ERROR_NO_MATCH:
+                message = "No match";
+                break;
+            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                message = "RecognitionService busy";
+                break;
+            case SpeechRecognizer.ERROR_SERVER:
+                message = "error from server";
+                break;
+            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                message = "No speech input";
+                break;
+            default:
+                message = "Didn't understand, please try again.";
+                break;
+        }
+        return message;
+    }
 }

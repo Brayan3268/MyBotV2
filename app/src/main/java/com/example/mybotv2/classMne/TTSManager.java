@@ -4,6 +4,7 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
+import java.io.File;
 import java.util.Locale;
 
 public class TTSManager {
@@ -36,6 +37,10 @@ public class TTSManager {
     public void shutDown(){
         mTts.shutdown();
     }
+
+    public void stop() { mTts.stop(); }
+
+    //public void start() { mTts.}
 
     public void addQueue(String text){
         if(isLoaded){
