@@ -120,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
                         "de las personas",
                 new String[]{"Nombre", "", "Razón", "", "¿Ayudar?", ""},
                 new String[]{Constants.URL_PEOPLE_FOR_KNOW_HELP_INSERT, Constants.URL_PEOPLE_FOR_KNOW_HELP_SELECT},
-                new String[]{"nameperson", "", "reason", "", "help", ""}));
+                new String[]{"nameperson", "", "reason", "", "help", ""},
+                "Personas"));
 
         listaComandos.add(new Comandos(4,
                 new String[]{"idea", "ideas"},
@@ -128,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
                         "de las ideas de programación",
                 new String[]{"Idea", "", "colaboradores", ""},
                 new String[]{Constants.URL_IDEAS_FOR_APPS_INSERT, Constants.URL_IDEAS_FOR_APPS_SELECT},
-                new String[]{"ideadescription", "", "collaborator", ""}));
+                new String[]{"ideadescription", "", "collaborator", ""},
+                "Ideas"));
 
         listaComandos.add(new Comandos(5,
                 new String[]{"juego", "juegos", "rescatado", "terminado", "finalizado"},
@@ -136,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
                         "base de datos de los juegos rescatados un nuevo juego que hayas completado",
                 new String[]{"Nombre", ""},
                 new String[]{Constants.URL_GAME_FINISHED_INSERT, Constants.URL_GAME_FINISHED_READ},
-                new String[]{"namegame", ""}));
+                new String[]{"namegame", ""},
+                "Juegos rescatados"));
 
         listaComandos.add(new Comandos(6,
                 new String[]{"película", "películas", "serie", "series", "pelicula", "peliculas"},
@@ -144,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
                         "a la base de datos",
                 new String[]{"Nombre", "", "Tipo", ""},
                 new String[]{Constants.URL_MOVIES_OR_SERIES, Constants.URL_MOVIES_OR_SERIES_SELECT},
-                new String[]{"namemovieorserie", "", "typems", ""}));
+                new String[]{"namemovieorserie", "", "typems", ""},
+                "Películas o series"));
 
         listaComandos.add(new Comandos(7,
                 new String[]{"puedes", "sabes", "comando", "comandos"},
@@ -158,11 +162,12 @@ public class MainActivity extends AppCompatActivity {
 
         listaComandos.add(new Comandos(9,
                 new String[]{"tareas", "tengo", "hay", "tarea", "pendientes", "pendiente"},
-                "Si usas algunas de las palabras tareas, tengo, pendientes ó hay, te diré " +
-                        "todas las cosas que tengas por hacer",
+                "Si usas algunas de las palabras tareas, tengo, pendientes ó hay, podrás " +
+                        "añadir una nueva cosa que tengas por hacer",
                 new String[]{"Título", "", "Descripción", "", "¿Cuántos días tienes?", "", "Estado", ""},
                 new String[]{Constants.URL_THINGS_TO_DO_INSERT, Constants.URL_THINGS_TO_DO_SELECT},
-                new String[]{"title", "", "description", "", "datatodo", "", "status", ""}));
+                new String[]{"title", "", "description", "", "datatodo", "", "status", ""},
+                "Cosas pendientes"));
 
         listaComandos.add(new Comandos(10,
                 new String[]{"sugerir", "inexistente", "inexistentes"},
@@ -170,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
                         "que te gustaría que pudiera hacer",
                 new String[]{"¿Como quieres que se llame el comando?", "", "Descripción para este comando", "", "¿Cual es tú nombre?", ""},
                 new String[]{Constants.URL_COMAND_NON_EXIST_INSERT, Constants.URL_COMAND_NON_EXIST_SELECT},
-                new String[]{"intentcomand", "", "description", "", "whosuggestion", ""}));
+                new String[]{"intentcomand", "", "description", "", "whosuggestion", ""},
+                "Comandos inexistentes"));
 
         listaComandos.add(new Comandos(11,
                 new String[]{"documento", "documentos", "papeles", "archivos", "archivo"},
@@ -178,35 +184,45 @@ public class MainActivity extends AppCompatActivity {
                         "la base de datos junto con su identificador",
                 new String[]{"Descripción", "", "Identificador", ""},
                 new String[]{Constants.URL_FILE_INSERT, Constants.URL_FILE_SELECT},
-                new String[]{"description", "", "idforfiles", ""}));
+                new String[]{"description", "", "idforfiles", ""},
+                "Documentos"));
 
         listaComandos.add(new Comandos(12,
                 new String[]{"libro", "libros"},
                 "Si usas la palabra libro, podras añadir un libro leído a la base de datos",
                 new String[]{"Nombre", "", "Autor", "", "Valoración", ""},
                 new String[]{Constants.URL_BOOKS_INSERT, Constants.URL_BOOKS_SELECT},
-                new String[]{"bookname", "", "author", "", "assessment", ""}));
+                new String[]{"bookname", "", "author", "", "assessment", ""},
+                "Libros"));
 
         listaComandos.add(new Comandos(13,
                 new String[]{"cumpleaños"},
                 "Si usas la palabra cumpleaños podras agregar el cumpleaños de quien tú quieras",
                 new String[]{"Nombre", "", "Fecha", ""},
                 new String[]{Constants.URL_BIRTHDAY_INSERT, Constants.URL_BIRTHDAY_SELECT},
-                new String[]{"namebirthday", "", "date", ""}));
+                new String[]{"namebirthday", "", "date", ""},
+                "Cumpleaños"));
 
         listaComandos.add(new Comandos(14,
                 new String[]{"comprar", "por comprar", "para comprar"},
                 "Si usas la palabra comprar podrás guardar algo que tengas pendiente por comprar",
                 new String[]{"Nombre", "", "Categoría", "", "Costo estimado", ""},
                 new String[]{Constants.URL_THINGS_TO_BUY_INSERT, Constants.URL_THINGS_TO_BUY_SELECT},
-                new String[]{"namettb", "", "category", "", "estimatedcost", ""}));
+                new String[]{"namettb", "", "category", "", "estimatedcost", ""},
+                "Cosas por comprar"));
 
         listaComandos.add(new Comandos(15,
                 new String[]{"frases", "frase"},
                 "Si usas la palabra frases podrás guardar una nueva frase que te haya gustado",
                 new String[]{"Frase", "", "Autor", ""},
                 new String[]{Constants.URL_PHRASES_INSERT, Constants.URL_PHRASES_SELECT},
-                new String[]{"phrase", "", "author", ""}));
+                new String[]{"phrase", "", "author", ""},
+                "Frases"));
+
+        listaComandos.add(new Comandos(16,
+                new String[]{"bases", "bases de datos"},
+                "Si dices las palabras bases de datos podras saber todas las bases de datos " +
+                        "que puedo consultar en este momento"));
 
         //proyectos actuales, cosas por hacer
         //Guardar actividades para realizar con fecha, tipo calendario, dato random
@@ -626,6 +642,9 @@ public class MainActivity extends AppCompatActivity {
             case 15:
                 comandoFrases(comando);
                 break;
+            case 16:
+                comandoBasesDatos();
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -739,8 +758,6 @@ public class MainActivity extends AppCompatActivity {
             datos.put("help", c.getDatosInsertarBaseDatos()[5]);
             datos.put("dataPeopleForKnowHelp", date());
             recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -752,8 +769,6 @@ public class MainActivity extends AppCompatActivity {
             datos.put("dataIdea", date());
             datos.put("collaborator", c.getDatosInsertarBaseDatos()[3]);
             recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -763,8 +778,6 @@ public class MainActivity extends AppCompatActivity {
             Map<String, String> datos = new HashMap<>();
             datos.put("nameGame", c.getDatosInsertarBaseDatos()[1]);
             recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -775,83 +788,6 @@ public class MainActivity extends AppCompatActivity {
             datos.put("nameMovieOrSerie", c.getDatosInsertarBaseDatos()[1]);
             datos.put("typeMS", c.getDatosInsertarBaseDatos()[3]);
             recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void comandoSugerirComandos(Comandos c) {
-        solicitarDatosNecesarios(c);
-        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
-            Map<String, String> datos = new HashMap<>();
-            datos.put("intentComand", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("description", c.getDatosInsertarBaseDatos()[3]);
-            datos.put("whoSuggestion", c.getDatosInsertarBaseDatos()[5]);
-            recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void comandoArchivos(Comandos c){
-        solicitarDatosNecesarios(c);
-        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
-            Map<String, String> datos = new HashMap<>();
-            datos.put("description", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("idforfiles", c.getDatosInsertarBaseDatos()[3]);
-            recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void comandoLibros(Comandos c){
-        solicitarDatosNecesarios(c);
-        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
-            Map<String, String> datos = new HashMap<>();
-            datos.put("bookname", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("author", c.getDatosInsertarBaseDatos()[3]);
-            datos.put("assessment", c.getDatosInsertarBaseDatos()[5]);
-            recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void comandoBirthDay(Comandos c){
-        solicitarDatosNecesarios(c);
-        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
-            Map<String, String> datos = new HashMap<>();
-            datos.put("namebirthday", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("date", c.getDatosInsertarBaseDatos()[3]);
-            recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void comandoCosasToBuy(Comandos c){
-        solicitarDatosNecesarios(c);
-        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
-            Map<String, String> datos = new HashMap<>();
-            datos.put("namettb", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("category", c.getDatosInsertarBaseDatos()[3]);
-            datos.put("estimatedcost", c.getDatosInsertarBaseDatos()[5]);
-            recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void comandoFrases(Comandos c){
-        solicitarDatosNecesarios(c);
-        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
-            Map<String, String> datos = new HashMap<>();
-            datos.put("phrase", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("author", c.getDatosInsertarBaseDatos()[3]);
-            recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -916,10 +852,97 @@ public class MainActivity extends AppCompatActivity {
             datos.put("dataToDo", c.getDatosInsertarBaseDatos()[5]);
             datos.put("status", c.getDatosInsertarBaseDatos()[7]);
             recordGeneral(datos, c);
-        } else {
-            Toast.makeText(getApplicationContext(), "else", Toast.LENGTH_LONG).show();
         }
-        //ttsManager.addQueue(dia);
+    }
+
+    public void comandoSugerirComandos(Comandos c) {
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("intentComand", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("description", c.getDatosInsertarBaseDatos()[3]);
+            datos.put("whoSuggestion", c.getDatosInsertarBaseDatos()[5]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    public void comandoArchivos(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("description", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("idforfiles", c.getDatosInsertarBaseDatos()[3]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    public void comandoLibros(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("bookname", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("author", c.getDatosInsertarBaseDatos()[3]);
+            datos.put("assessment", c.getDatosInsertarBaseDatos()[5]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    public void comandoBirthDay(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("namebirthday", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("date", c.getDatosInsertarBaseDatos()[3]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    public void comandoCosasToBuy(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("namettb", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("category", c.getDatosInsertarBaseDatos()[3]);
+            datos.put("estimatedcost", c.getDatosInsertarBaseDatos()[5]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    public void comandoFrases(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("phrase", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("author", c.getDatosInsertarBaseDatos()[3]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    public void comandoBasesDatos(){
+        int nBasesDatos = 0;
+        ArrayList<String> basesDatos = new ArrayList<>();
+        String res = "";
+
+        for (Comandos c : listaComandos){
+            if(c.getNombreBaseDatos() != null){
+                nBasesDatos++;
+                basesDatos.add(c.getNombreBaseDatos());
+            }
+        }
+
+        ttsManager.addQueue("Por ahora existen " + nBasesDatos + " bases de datos a las que puedo acceder");
+        ttsManager.addQueue("Estas son: ");
+
+        for (int i = 0; i < basesDatos.size(); i++){
+            if(i == basesDatos.size() - 1) {
+                ttsManager.addQueue("Y " + basesDatos.get(i));
+            }else{
+                ttsManager.addQueue(basesDatos.get(i));
+            }
+            res += basesDatos.get(i) + ". ";
+        }
+        respuesta.setText(res);
+        puedeAgradecer = true;
     }
 /*
     /**
@@ -940,8 +963,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param datos asdf
      */
-    private void
-    recordGeneral(Map<String, String> datos, Comandos c) {
+    private void recordGeneral(Map<String, String> datos, Comandos c) {
         if (!esperarConfirmacion) {
             try {
                 pedirConfirmacion(c);

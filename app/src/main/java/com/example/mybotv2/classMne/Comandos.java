@@ -17,6 +17,7 @@ public class Comandos {
     * en la posición 3 es la de eliminar datos en la base de datos*/
     private String[] rutas;
     private String[] datosLeerBaseDatos; //Los datos para leer una base de datos y decirla
+    private String nombreBaseDatos; //La base de datos a la que está asociado este comando
 
     /**
      * Constructor vacío para el manejo temprano de los objetos
@@ -50,7 +51,7 @@ public class Comandos {
      */
     public Comandos(int numeroComando, String[] comando, String descripcion,
                     String[] datosInsertarBaseDatos, String[] rutas,
-                    String[] datosLeerBaseDatos) {
+                    String[] datosLeerBaseDatos, String nombreBaseDatos) {
         this.numeroComando = numeroComando;
         this.comando = comando;
         this.descripcion = descripcion;
@@ -59,6 +60,7 @@ public class Comandos {
         this.confirmacion = false;
         this.rutas = rutas;
         this.datosLeerBaseDatos = datosLeerBaseDatos;
+        this.nombreBaseDatos = nombreBaseDatos;
     }
 
     /**
@@ -154,5 +156,13 @@ public class Comandos {
     public String[] getDatosLeerBaseDatos() { return datosLeerBaseDatos; }
 
     public void setDatosLeerBaseDatos(String[] datosLeerBaseDatos) { this.datosLeerBaseDatos = datosLeerBaseDatos; }
+
+    /**
+     * Metodo para obtener la base datos a la que esta asociado un comando
+     * @return
+     */
+    public String getNombreBaseDatos() {
+        return nombreBaseDatos;
+    }
 
 }
