@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     String strSpeech2Text = "", textoRepetido = "";
     final String[] diasSemana = new String[9];
     boolean isGreeting, isGoodbyes, esperarConfirmacion, puedeAgradecer, leyendo = false;
-    boolean algunaBaseDatosProgreso = false;
+    boolean algunaBaseDatosProgreso = false, buscandoBaseDato = false, buscandoDato = false;
 
     ArrayList<String> saludos = new ArrayList<>();
     ArrayList<String> saludosBot = new ArrayList<>();
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         agradecimientosBot.add("no hay porqué");
         agradecimientosBot.add("seguiré aquí por si me necesitas");
         agradecimientosBot.add("¡fue un trabajo en equipo!");
+        agradecimientosBot.add("¡Estoy para ayudarte!");
     }
 
     /* La lista de los comandos que reconoce la aplicación */ {
@@ -224,6 +225,12 @@ public class MainActivity extends AppCompatActivity {
                 "Si dices las palabras bases de datos podras saber todas las bases de datos " +
                         "que puedo consultar en este momento"));
 
+        listaComandos.add(new Comandos(17,
+                new String[]{"busca", "buscar"},
+                "Si dices la palabra buscar podrás consultar una base de datos de tu " +
+                        "elección y buscar un dato en especifico"
+        ));
+
         //proyectos actuales, cosas por hacer
         //Guardar actividades para realizar con fecha, tipo calendario, dato random
         numeroComandos = listaComandos.size();
@@ -283,6 +290,10 @@ public class MainActivity extends AppCompatActivity {
                     strSpeech2Text = speech.get(0);
                     grabar.setText(strSpeech2Text);
 
+                    if(buscarDatoEspecifico(strSpeech2Text)){
+                        return;
+                    }
+
                     //Es para agradecer al bot
                     if(agradecer(strSpeech2Text.toLowerCase())){
                         return;
@@ -326,6 +337,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
     );
+
+    public boolean buscarDatoEspecifico(String texto){
+        if(buscandoBaseDato){
+            for (Comandos c : listaComandos) {
+                for (String s : c.getComando()) {
+                    if (texto.toLowerCase().contains(s.toLowerCase())) {
+                        c.setEnProgreso(true);
+                        solicitarDatosNecesarios(c);
+                        buscandoBaseDato = false;
+                        buscandoDato = true;
+                        //readDataBase(c);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Metodo para cuando se le dan las gracias al bot y se devuelve una respuesta al azar
@@ -377,6 +406,12 @@ public class MainActivity extends AppCompatActivity {
                 respuesta.setText(texto2Return);
                 ttsManager.initQueue(texto2Return);
                 isGreeting = true;
+                /*try {
+                    while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
+                        Thread.sleep(2000);
+                    }
+                } catch (Exception ignored) {}
+                iniciarEntradaVoz();*/
                 return false;
             }
         }
@@ -517,6 +552,8 @@ public class MainActivity extends AppCompatActivity {
         c.setConfirmacion(false);*/
         leyendo = false;
         puedeAgradecer = true;
+        buscandoDato = false;
+        buscandoBaseDato = false;
     }
 
 
@@ -547,7 +584,11 @@ public class MainActivity extends AppCompatActivity {
                 i++;
             }
             if (ciclo) {
-                comandosParaEjecutar(c.getComando()[0]);
+                if(buscandoDato){
+                    comandoBuscarDatoEspecifico(true);
+                }else{
+                    comandosParaEjecutar(c.getComando()[0]);
+                }
             }
         } catch (Exception ignored) {
         }
@@ -645,6 +686,9 @@ public class MainActivity extends AppCompatActivity {
             case 16:
                 comandoBasesDatos();
                 break;
+            case 17:
+                comandoBuscarDatoEspecifico(false);
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -712,7 +756,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Este metodo sirve para decirle al usuario la fecha actual con día, mes y año
      */
-    public void comandoFecha() {
+    private void comandoFecha() {
         Calendar c = Calendar.getInstance();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("EEEE/dd/MM/yyyy");
 
@@ -725,7 +769,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Este metodo sirve para decirle al usuario la hora actual
      */
-    public void comandoHora() {
+    private void comandoHora() {
         long ahora = System.currentTimeMillis();
         Calendar calendario = Calendar.getInstance();
         calendario.setTimeInMillis(ahora);
@@ -761,7 +805,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoIdeas(Comandos c) {
+    private void comandoIdeas(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -772,7 +816,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoJuegos(Comandos c) {
+    private void comandoJuegos(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -781,7 +825,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoPeliculasSeries(Comandos c) {
+    private void comandoPeliculasSeries(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -791,7 +835,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoComandos() {
+    private void comandoComandos() {
         StringBuilder comandos = new StringBuilder();
         for (Comandos c : listaComandos) {
             comandos.append(c.getNumeroComando()).append(")");
@@ -817,7 +861,7 @@ public class MainActivity extends AppCompatActivity {
         puedeAgradecer = true;
     }
 
-    public void comandoLeer(String texto) {
+    private void comandoLeer(String texto) {
         if (leyendo) {
             for (Comandos c : listaComandos) {
                 for (String s : c.getComando()) {
@@ -841,7 +885,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoCosasToDo(Comandos c) {
+    private void comandoCosasToDo(Comandos c) {
         //String dia = tomarDiaSeleccionado(texto);
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -855,7 +899,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoSugerirComandos(Comandos c) {
+    private void comandoSugerirComandos(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -866,7 +910,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoArchivos(Comandos c){
+    private void comandoArchivos(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -876,7 +920,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoLibros(Comandos c){
+    private void comandoLibros(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -887,7 +931,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoBirthDay(Comandos c){
+    private void comandoBirthDay(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -897,7 +941,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoCosasToBuy(Comandos c){
+    private void comandoCosasToBuy(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -908,7 +952,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoFrases(Comandos c){
+    private void comandoFrases(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -918,7 +962,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void comandoBasesDatos(){
+    private void comandoBasesDatos(){
         int nBasesDatos = 0;
         ArrayList<String> basesDatos = new ArrayList<>();
         String res = "";
@@ -943,6 +987,23 @@ public class MainActivity extends AppCompatActivity {
         }
         respuesta.setText(res);
         puedeAgradecer = true;
+    }
+
+    private void comandoBuscarDatoEspecifico(boolean llenos){
+        if(llenos){
+            readSpecificDataBase(mirarBaseDatosEnProgreso());
+        }else{
+            ttsManager.addQueue("¿En cual base de datos quieres buscar?");
+            buscandoBaseDato = true;
+            try {
+                while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
+                    Thread.sleep(2000);
+                }
+            } catch (Exception ignored) {}
+            iniciarEntradaVoz();
+        }
+
+
     }
 /*
     /**
@@ -1073,6 +1134,109 @@ public class MainActivity extends AppCompatActivity {
                         leyendo = false;
                     }
                 });
+    }
+
+    boolean test = false;
+
+
+    private void readSpecificDataBase(Comandos c) {
+        AndroidNetworking.post(c.getRutas()[1])
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String res = response.getString("respuesta");
+                            if (res.equals("200")) {
+                                JSONArray array = response.getJSONArray("data");
+                                String[] datosBuscar = c.getDatosInsertarBaseDatos();
+                                StringBuilder mostrar = new StringBuilder();
+                                String leer = "";
+                                toLowerCase(datosBuscar);
+
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject jlo = array.getJSONObject(i);
+
+                                    //JSONObject objectUser = response.getJSONObject("data");
+                                    String[] datosLeidos = c.getDatosLeerBaseDatos();
+                                    for (int j = 0; j < c.getDatosLeerBaseDatos().length - 1; j++) {
+                                        if (j % 2 == 0) {
+                                            datosLeidos[j + 1] = jlo.getString(datosLeidos[j]);
+                                        }
+                                    }
+
+                                    toLowerCase(datosLeidos);
+                                    test = false;
+                                     if(coincidencias(datosLeidos, datosBuscar, 0)){
+                                        String[] nombresCampos = c.getDatosInsertarBaseDatos();
+                                        for (int k = 0; k < datosLeidos.length; k++) {
+                                            if (k % 2 == 0) {
+                                                leer += nombresCampos[k] + ".";
+                                                mostrar.append(nombresCampos[k]).append(": ");
+                                            } else {
+                                                leer += datosLeidos[k];
+                                                mostrar.append(datosLeidos[k]).append(".\n");
+                                            }
+                                            //ttsManager.addQueue(leer);
+                                        }
+                                    }
+
+                                }
+
+                                if(leer.equals("")){
+                                    ttsManager.addQueue("Lo lamento. No hay registros similares en la base de datos");
+                                    ttsManager.addQueue("¿Algo más qué más quieres hacer?");
+                                }else{
+                                    ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
+                                    ttsManager.addQueue(leer);
+                                    ttsManager.addQueue("Listo. ¿Qué más quieres hacer?");
+                                }
+
+                                respuesta.setText(mostrar.toString());
+                            } else {
+                                ttsManager.addQueue("No hay datos para leer");
+                            }
+                            puedeAgradecer = true;
+                            resetearDatos("");
+                            leyendo = false;
+                        } catch (JSONException e) {
+                            Toast.makeText(getApplicationContext(), "Error :" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            leyendo = false;
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Toast.makeText(getApplicationContext(), "Error :" + anError.getErrorDetail(), Toast.LENGTH_LONG).show();
+                        leyendo = false;
+                    }
+                });
+    }
+
+    public String[] toLowerCase(String[] datos){
+        for(int i = 0; i < datos.length; i++){
+            datos[i] = datos[i].toLowerCase();
+        }
+        return datos;
+    }
+
+
+    public boolean coincidencias(String[] datosLeidos, String[] datosBuscados, int i){
+        if(i < datosLeidos.length){
+            if (i % 2 != 0) {
+                if(datosLeidos[i].contains(datosBuscados[i])){
+                    test = true;
+                }else{
+                    test = false;
+                }
+            }else{
+                coincidencias(datosLeidos, datosBuscados, i + 1);
+            }
+        }else{
+            return test;
+        }
+        return coincidencias(datosLeidos, datosBuscados, i + 2);
     }
 
     public void pedirConfirmacion(Comandos c) throws InterruptedException {
