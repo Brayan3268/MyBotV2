@@ -406,12 +406,12 @@ public class MainActivity extends AppCompatActivity {
                 respuesta.setText(texto2Return);
                 ttsManager.initQueue(texto2Return);
                 isGreeting = true;
-                /*try {
+                try {
                     while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
                         Thread.sleep(2000);
                     }
                 } catch (Exception ignored) {}
-                iniciarEntradaVoz();*/
+                iniciarEntradaVoz();
                 return false;
             }
         }
@@ -997,7 +997,7 @@ public class MainActivity extends AppCompatActivity {
             buscandoBaseDato = true;
             try {
                 while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                    Thread.sleep(2000);
+                    Thread.sleep(1500);
                 }
             } catch (Exception ignored) {}
             iniciarEntradaVoz();
@@ -1136,9 +1136,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    boolean test = false;
-
-
     private void readSpecificDataBase(Comandos c) {
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
@@ -1167,7 +1164,6 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     toLowerCase(datosLeidos);
-                                    test = false;
                                      if(coincidencias(datosLeidos, datosBuscar, 0)){
                                         String[] nombresCampos = c.getDatosInsertarBaseDatos();
                                         for (int k = 0; k < datosLeidos.length; k++) {
@@ -1186,7 +1182,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if(leer.equals("")){
                                     ttsManager.addQueue("Lo lamento. No hay registros similares en la base de datos");
-                                    ttsManager.addQueue("¿Algo más qué más quieres hacer?");
+                                    ttsManager.addQueue("¿Algo más qué quieras hacer?");
                                 }else{
                                     ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
                                     ttsManager.addQueue(leer);
@@ -1225,18 +1221,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean coincidencias(String[] datosLeidos, String[] datosBuscados, int i){
         if(i < datosLeidos.length){
             if (i % 2 != 0) {
-                if(datosLeidos[i].contains(datosBuscados[i])){
-                    test = true;
-                }else{
-                    test = false;
+                try{
+                    if(datosLeidos[i].contains(datosBuscados[i])){
+                        return true;
+                    }else{
+                        return coincidencias(datosLeidos, datosBuscados, i + 2);
+                    }
+                }catch(Exception ignored){
+                    return true;
                 }
             }else{
-                coincidencias(datosLeidos, datosBuscados, i + 1);
+                return coincidencias(datosLeidos, datosBuscados, i + 1);
             }
         }else{
-            return test;
+            return false;
         }
-        return coincidencias(datosLeidos, datosBuscados, i + 2);
+        //return coincidencias(datosLeidos, datosBuscados, i + 1);
     }
 
     public void pedirConfirmacion(Comandos c) throws InterruptedException {

@@ -1,3 +1,8 @@
+COMANDO PARA QUITAR EL ATTACHED DEL DEBUGGIN POR CONSOLA:
+adb shell am clear-debug-app
+
+
+
 /*With this code we can obtain Json arrays for the list of objects*/
 
 /*JSONArray arrayUsuario = response.getJSONArray("data");
@@ -239,3 +244,74 @@ MAIN ENTER DATA IN THE METHOD: isDataSelected()
                     }
                 }).start();
             }*/
+
+
+
+
+
+
+
+    /*
+    Funciona solo si busca por la ultima de las condiciones dadas
+
+        public boolean coincidencias(String[] datosLeidos, String[] datosBuscados, int i){
+        if(i < datosLeidos.length){
+            if (i % 2 != 0) {
+                if(datosLeidos[i].contains(datosBuscados[i])){
+                    test = true;
+                }else{
+                    test = false;
+                }
+            }else{
+                coincidencias(datosLeidos, datosBuscados, i + 1);
+            }
+        }else{
+            return test;
+        }
+        return coincidencias(datosLeidos, datosBuscados, i + 2);
+    }
+
+
+    Lo trae todo pero ya está bien hecha la recusividad
+        public boolean coincidencias(String[] datosLeidos, String[] datosBuscados, int i){
+        if(i < datosLeidos.length){
+            if (i % 2 != 0) {
+                try{
+                    return datosLeidos[i].contains(datosBuscados[i]) || coincidencias(datosLeidos, datosBuscados, i + 2);
+                }catch(Exception ignored){
+                    return true;
+                }
+            }else{
+                return coincidencias(datosLeidos, datosBuscados, i + 1);
+            }
+        }else{
+            return true;
+        }
+        //return coincidencias(datosLeidos, datosBuscados, i + 1);
+    }
+
+
+    Funciona si busca por la primera condicion
+
+        public boolean coincidencias(String[] datosLeidos, String[] datosBuscados, int i){
+        if(i < datosLeidos.length){
+            if (i % 2 != 0) {
+                try{
+                    if(datosLeidos[i].contains(datosBuscados[i])){
+                        return datosLeidos[i].contains(datosBuscados[i]) || coincidencias(datosLeidos, datosBuscados, i + 2);
+                    }else{
+                        return false;
+                    }
+                }catch(Exception ignored){
+                    return true;
+                }
+            }else{
+                return coincidencias(datosLeidos, datosBuscados, i + 1);
+            }
+        }else{
+            return true;
+        }
+        //return coincidencias(datosLeidos, datosBuscados, i + 1);
+    }
+
+     */
