@@ -1,9 +1,15 @@
 <component name="ProjectDictionaryState">
   <dictionary name="braya">
     <words>
+      <w>abecedario</w>
+      <w>acaba</w>
+      <w>acabaras</w>
+      <w>acabó</w>
       <w>acceder</w>
       <w>acceso</w>
       <w>activa</w>
+      <w>activado</w>
+      <w>activar</w>
       <w>actividades</w>
       <w>activo</w>
       <w>actuales</w>
@@ -26,6 +32,8 @@
       <w>almacenamiento</w>
       <w>almacenando</w>
       <w>almacenar</w>
+      <w>analizar</w>
+      <w>apagaras</w>
       <w>aplicación</w>
       <w>aquí</w>
       <w>archivo</w>
@@ -48,21 +56,29 @@
       <w>buscados</w>
       <w>buscando</w>
       <w>buscar</w>
+      <w>busqueda</w>
       <w>cada</w>
       <w>calendario</w>
       <w>cambio</w>
       <w>campesino</w>
       <w>campesinos</w>
+      <w>campo</w>
       <w>cance</w>
       <w>cancela</w>
       <w>cancelado</w>
       <w>cancelar</w>
       <w>cantidad</w>
+      <w>caracter</w>
+      <w>caracteres</w>
+      <w>caso</w>
       <w>categoría</w>
+      <w>cero</w>
       <w>chao</w>
       <w>chau</w>
       <w>ciclo</w>
       <w>cierra</w>
+      <w>cierre</w>
+      <w>cinco</w>
       <w>claro</w>
       <w>clase</w>
       <w>claves</w>
@@ -71,11 +87,17 @@
       <w>comand</w>
       <w>comando</w>
       <w>comandos</w>
+      <w>comenzará</w>
       <w>comienza</w>
       <w>completa</w>
       <w>completado</w>
+      <w>completar</w>
+      <w>completarlo</w>
+      <w>completos</w>
       <w>componentes</w>
       <w>comprar</w>
+      <w>concatena</w>
+      <w>concatenar</w>
       <w>confirma</w>
       <w>confirmacion</w>
       <w>confirmación</w>
@@ -87,21 +109,27 @@
       <w>contestación</w>
       <w>contestando</w>
       <w>continuar</w>
+      <w>controla</w>
       <w>correr</w>
       <w>cosa</w>
       <w>cosas</w>
       <w>costo</w>
       <w>crea</w>
       <w>cual</w>
+      <w>cuales</w>
       <w>cuando</w>
+      <w>cuantas</w>
+      <w>cuatro</w>
       <w>cumpleaño</w>
       <w>cumpleaños</w>
+      <w>cumplío</w>
       <w>cuántos</w>
       <w>cuídate</w>
       <w>código</w>
       <w>cúal</w>
       <w>cúando</w>
       <w>cúantos</w>
+      <w>dados</w>
       <w>datasuggestion</w>
       <w>datatodo</w>
       <w>datatoinsert</w>
@@ -113,8 +141,13 @@
       <w>decirla</w>
       <w>decirle</w>
       <w>dejar</w>
+      <w>deletrea</w>
+      <w>deletrear</w>
+      <w>deletreo</w>
       <w>demás</w>
       <w>dependiendo</w>
+      <w>desactivado</w>
+      <w>desactivar</w>
       <w>desarrollado</w>
       <w>descripcion</w>
       <w>descripción</w>
@@ -126,19 +159,27 @@
       <w>devolver</w>
       <w>devuelve</w>
       <w>dicho</w>
+      <w>diciendo</w>
       <w>diferente</w>
+      <w>diferentes</w>
+      <w>dijo</w>
+      <w>directamente</w>
       <w>diré</w>
       <w>dispositivo</w>
       <w>documento</w>
       <w>documentos</w>
+      <w>donde</w>
       <w>días</w>
       <w>ejecución</w>
       <w>ejecuta</w>
       <w>ejecutando</w>
       <w>ejecutar</w>
       <w>elección</w>
+      <w>elegido</w>
+      <w>elegidos</w>
       <w>elegir</w>
       <w>elige</w>
+      <w>eligio</w>
       <w>eliminar</w>
       <w>ellos</w>
       <w>empezamos</w>
@@ -146,27 +187,35 @@
       <w>entendido</w>
       <w>entonces</w>
       <w>entrada</w>
+      <w>entre</w>
       <w>entró</w>
       <w>envía</w>
       <w>escuchar</w>
+      <w>espacio</w>
       <w>especifico</w>
+      <w>especificos</w>
       <w>espera</w>
       <w>esperar</w>
       <w>esperarías</w>
       <w>espero</w>
       <w>estado</w>
+      <w>estar</w>
       <w>estas</w>
       <w>este</w>
       <w>estimado</w>
       <w>estimatedcost</w>
       <w>está</w>
       <w>estés</w>
+      <w>excepción</w>
       <w>existe</w>
       <w>existen</w>
       <w>exitosamente</w>
       <w>fecha</w>
       <w>finalizado</w>
       <w>finalizar</w>
+      <w>formada</w>
+      <w>formando</w>
+      <w>formar</w>
       <w>frase</w>
       <w>frases</w>
       <w>funcionalidad</w>
@@ -178,10 +227,12 @@
       <w>guardar</w>
       <w>guardarlo</w>
       <w>guardaré</w>
+      <w>guardó</w>
       <w>gustado</w>
       <w>gustaria</w>
       <w>gustaría</w>
       <w>haberte</w>
+      <w>hablando</w>
       <w>hablar</w>
       <w>hacemos</w>
       <w>hacer</w>
@@ -194,12 +245,15 @@
       <w>identificador</w>
       <w>idforfiles</w>
       <w>imagebutton</w>
+      <w>indice</w>
       <w>inexistente</w>
       <w>inexistentes</w>
       <w>información</w>
       <w>ingresa</w>
       <w>ingresar</w>
+      <w>inicia</w>
       <w>inicializan</w>
+      <w>inicializar</w>
       <w>iniciar</w>
       <w>iniciarás</w>
       <w>inicio</w>
@@ -213,6 +267,8 @@
       <w>intentcomand</w>
       <w>intento</w>
       <w>intercambio</w>
+      <w>invoca</w>
+      <w>iterador</w>
       <w>juegan</w>
       <w>juego</w>
       <w>juegos</w>
@@ -223,6 +279,7 @@
       <w>junto</w>
       <w>leeme</w>
       <w>leidos</w>
+      <w>letras</w>
       <w>leyendo</w>
       <w>leyeron</w>
       <w>leído</w>
@@ -236,6 +293,7 @@
       <w>llame</w>
       <w>llenando</w>
       <w>llenar</w>
+      <w>llenarón</w>
       <w>lleno</w>
       <w>llenos</w>
       <w>lobo</w>
@@ -244,6 +302,8 @@
       <w>lunes</w>
       <w>léeme</w>
       <w>manejo</w>
+      <w>manera</w>
+      <w>mapa</w>
       <w>martes</w>
       <w>mañana</w>
       <w>mediante</w>
@@ -253,15 +313,18 @@
       <w>microfono</w>
       <w>miercoles</w>
       <w>minuto</w>
+      <w>minúsculas</w>
       <w>mirar</w>
       <w>mismo</w>
       <w>mismos</w>
       <w>miércoles</w>
       <w>modales</w>
+      <w>modo</w>
       <w>momento</w>
       <w>mostrar</w>
       <w>muchas</w>
       <w>mucho</w>
+      <w>muestra</w>
       <w>mybotv</w>
       <w>método</w>
       <w>namebirthday</w>
@@ -273,22 +336,31 @@
       <w>necesitan</w>
       <w>ninguna</w>
       <w>ninguno</w>
+      <w>ningún</w>
       <w>noche</w>
       <w>noches</w>
       <w>nombre</w>
       <w>nombres</w>
       <w>nueva</w>
+      <w>nueve</w>
       <w>nuevo</w>
       <w>nuevos</w>
       <w>numero</w>
+      <w>numeros</w>
       <w>objeto</w>
       <w>objetos</w>
       <w>obtener</w>
+      <w>obtenidos</w>
+      <w>ocho</w>
+      <w>ocurre</w>
+      <w>oraciones</w>
       <w>otra</w>
+      <w>otro</w>
       <w>palabra</w>
       <w>palabras</w>
       <w>papeles</w>
       <w>parametro</w>
+      <w>parametros</w>
       <w>pasa</w>
       <w>pasar</w>
       <w>pasara</w>
@@ -301,6 +373,7 @@
       <w>pendientes</w>
       <w>peopleforknowhelp</w>
       <w>pequeña</w>
+      <w>permite</w>
       <w>pero</w>
       <w>personajes</w>
       <w>personas</w>
@@ -317,7 +390,9 @@
       <w>posible</w>
       <w>posición</w>
       <w>posteriormente</w>
+      <w>pregunta</w>
       <w>presiona</w>
+      <w>presuntamente</w>
       <w>primero</w>
       <w>principalmente</w>
       <w>proceso</w>
@@ -325,6 +400,10 @@
       <w>programación</w>
       <w>progreso</w>
       <w>propio</w>
+      <w>proporcionados</w>
+      <w>proporcionando</w>
+      <w>protocolo</w>
+      <w>proveniente</w>
       <w>proyectos</w>
       <w>prueba</w>
       <w>pudiera</w>
@@ -339,6 +418,7 @@
       <w>quiere</w>
       <w>quieres</w>
       <w>razón</w>
+      <w>realiza</w>
       <w>realizar</w>
       <w>reconoce</w>
       <w>reconocer</w>
@@ -347,11 +427,17 @@
       <w>reconocio</w>
       <w>recorre</w>
       <w>recorrer</w>
+      <w>recursiva</w>
       <w>refieres</w>
+      <w>registran</w>
+      <w>registro</w>
+      <w>registros</w>
+      <w>rellene</w>
       <w>repetido</w>
       <w>repetirlo</w>
       <w>repitan</w>
       <w>repites</w>
+      <w>reproducir</w>
       <w>requieren</w>
       <w>rescatado</w>
       <w>rescatados</w>
@@ -359,11 +445,14 @@
       <w>responde</w>
       <w>respuesta</w>
       <w>resultado</w>
+      <w>resultados</w>
+      <w>retorna</w>
       <w>retornar</w>
       <w>rotativo</w>
       <w>ruta</w>
       <w>rutas</w>
       <w>sabado</w>
+      <w>sabe</w>
       <w>sabes</w>
       <w>salió</w>
       <w>saluda</w>
@@ -372,6 +461,7 @@
       <w>saludos</w>
       <w>saludó</w>
       <w>salúdame</w>
+      <w>seis</w>
       <w>seleccion</w>
       <w>seleccionado</w>
       <w>semana</w>
@@ -379,7 +469,10 @@
       <w>serie</w>
       <w>seríe</w>
       <w>siento</w>
+      <w>siete</w>
+      <w>siguiente</w>
       <w>siguientes</w>
+      <w>sino</w>
       <w>sirve</w>
       <w>sobre</w>
       <w>sobrecarga</w>
@@ -390,6 +483,8 @@
       <w>soporte</w>
       <w>subir</w>
       <w>sugerencia</w>
+      <w>sugerido</w>
+      <w>sugeridos</w>
       <w>sugerir</w>
       <w>sábado</w>
       <w>tampoco</w>
@@ -398,6 +493,7 @@
       <w>tarea</w>
       <w>tareas</w>
       <w>temprano</w>
+      <w>tener</w>
       <w>tenerte</w>
       <w>tenga</w>
       <w>tengan</w>
@@ -407,15 +503,20 @@
       <w>terminado</w>
       <w>terminados</w>
       <w>terminar</w>
+      <w>termines</w>
       <w>texto</w>
+      <w>tiempo</w>
       <w>tiene</w>
       <w>tienes</w>
       <w>tipo</w>
       <w>todas</w>
+      <w>todos</w>
       <w>tomar</w>
+      <w>tomaron</w>
       <w>tostada</w>
       <w>trae</w>
       <w>trayendo</w>
+      <w>tres</w>
       <w>typems</w>
       <w>título</w>
       <w>unicamente</w>
@@ -425,7 +526,9 @@
       <w>usuario</w>
       <w>usuarios</w>
       <w>vacío</w>
+      <w>validaciones</w>
       <w>validan</w>
+      <w>validar</w>
       <w>valoración</w>
       <w>vemos</w>
       <w>viernes</w>

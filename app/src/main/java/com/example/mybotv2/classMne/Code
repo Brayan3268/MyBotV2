@@ -2,6 +2,10 @@ COMANDO PARA QUITAR EL ATTACHED DEL DEBUGGIN POR CONSOLA:
 adb shell am clear-debug-app
 
 
+Lambdaso para recorrer un Map
+//abecedario.forEach((k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+
+
 
 /*With this code we can obtain Json arrays for the list of objects*/
 

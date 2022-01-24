@@ -42,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
     ImageButton img_btn_hablar;
 
     int numeroComandos, contador = 0;
-    String strSpeech2Text = "", textoRepetido = "";
+    String strSpeech2Text = "", textoRepetido = "", mostrar = "", formandoPalabra = "";
+    final String strAbecedario;
     final String[] diasSemana = new String[9];
-    boolean isGreeting, isGoodbyes, esperarConfirmacion, puedeAgradecer, leyendo = false;
-    boolean algunaBaseDatosProgreso = false, buscandoBaseDato = false, buscandoDato = false;
+    boolean isGreeting, isGoodbyes, esperarConfirmacion, puedeAgradecer, leyendo,
+            algunaBaseDatosProgreso, buscandoBaseDato, buscandoDato, deletrear = false;
 
     ArrayList<String> saludos = new ArrayList<>();
     ArrayList<String> saludosBot = new ArrayList<>();
@@ -54,47 +55,60 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> agradecimientosBot = new ArrayList<>();
     ArrayList<Comandos> listaComandos = new ArrayList<>();
 
+    Map<String, String> numeros = new HashMap<>();
+    Map<String, String> abecedario = new HashMap<>();
+
     Random rand = new Random();
 
     TTSManager ttsManager = null;
 
-    /* Los mensajes para que el bot sepa que es un saludo y que es una despedida y que responder */ {
-        saludos.add("hola");
-        saludos.add("buenos días");
-        saludos.add("buenas tardes");
-        saludos.add("buenas noches");
-        saludos.add("buenas");
-        saludos.add("buenos");
+    {
+        /* Inicializar la lista para deletrear y la conversion de letras a numeros*/
+        abecedario.put("1","a"); abecedario.put("2","b"); abecedario.put("3","c");
+        abecedario.put("4","d"); abecedario.put("5","e"); abecedario.put("6","f");
+        abecedario.put("7","g"); abecedario.put("8","h"); abecedario.put("9","i");
+        abecedario.put("10","j"); abecedario.put("11","k"); abecedario.put("12","l");
+        abecedario.put("13","m"); abecedario.put("14","n"); abecedario.put("15","ñ");
+        abecedario.put("16","o"); abecedario.put("17","p"); abecedario.put("18","q");
+        abecedario.put("19","r"); abecedario.put("20","s"); abecedario.put("21","t");
+        abecedario.put("22","u"); abecedario.put("23","v"); abecedario.put("24","w");
+        abecedario.put("25","x"); abecedario.put("26","y"); abecedario.put("27","z");
+        abecedario.put("28", " "); abecedario.put("29", ", "); abecedario.put("30", ".");
+
+        for (Map.Entry<String, String> entry : abecedario.entrySet()) {
+            if(entry.getValue().equals(" ")){
+                mostrar += "(Espacio)" + " --> " + entry.getValue() + "\n";
+            }else{
+                mostrar += entry.getKey() + " --> " + entry.getValue() + "\n";
+            }
+        }
+        mostrar += "Cuando termines de deletrear di 'listo'.";
+        strAbecedario = mostrar;
+
+        numeros.put("cero", "0"); numeros.put("uno", "1"); numeros.put("dos", "2");
+        numeros.put("tres", "3"); numeros.put("cuatro", "4"); numeros.put("cinco", "5");
+        numeros.put("seis", "6"); numeros.put("siete", "7"); numeros.put("ocho", "8");
+        numeros.put("nueve", "9");
+
+        /* Los mensajes para que el bot sepa que es un saludo y que es una despedida y que responder */
+        saludos.add("hola"); saludos.add("buenos días"); saludos.add("buenas tardes");
+        saludos.add("buenas noches"); saludos.add("buenas"); saludos.add("buenos");
 
         saludosBot.add("Hola. ¿Que quieres hacer hoy?");
         saludosBot.add("Espero que estés teniendo un lindo día. ¿Que te gustaria hacer?");
         saludosBot.add("¡Que genial tenerte aquí!. ¿Que hacemos ahora?");
         saludosBot.add("Hola. ¡¿Con qué empezamos?!");
 
-        despedidas.add("hasta luego");
-        despedidas.add("chao");
-        //despedidas.add("la buena");
-        despedidas.add("todo bien");
-        despedidas.add("adiós");
-        despedidas.add("chau");
-        despedidas.add("nos vemos");
-        despedidas.add("nos pi");
-        despedidas.add("hasta pronto");
+        despedidas.add("hasta luego"); despedidas.add("chao"); //despedidas.add("la buena");
+        despedidas.add("todo bien"); despedidas.add("adiós"); despedidas.add("chau");
+        despedidas.add("nos vemos"); despedidas.add("nos pi"); despedidas.add("hasta pronto");
 
-        diasSemana[0] = "lunes";
-        diasSemana[1] = "martes";
-        diasSemana[2] = "miércoles";
-        diasSemana[3] = "miercoles";
-        diasSemana[4] = "jueves";
-        diasSemana[5] = "viernes";
-        diasSemana[6] = "sábado";
-        diasSemana[7] = "sabado";
-        diasSemana[8] = "domingo";
+        diasSemana[0] = "lunes"; diasSemana[1] = "martes"; diasSemana[2] = "miércoles";
+        diasSemana[3] = "miercoles"; diasSemana[4] = "jueves"; diasSemana[5] = "viernes";
+        diasSemana[6] = "sábado"; diasSemana[7] = "sabado"; diasSemana[8] = "domingo";
 
-        agradecimientos.add("muchas gracias");
-        agradecimientos.add("gracias");
-        agradecimientos.add("mi dios le pague");
-        agradecimientos.add("la buena");
+        agradecimientos.add("muchas gracias"); agradecimientos.add("gracias");
+        agradecimientos.add("mi dios le pague"); agradecimientos.add("la buena");
 
         agradecimientosBot.add("¡Con mucho gusto!");
         agradecimientosBot.add("Para servirte");
@@ -105,9 +119,8 @@ public class MainActivity extends AppCompatActivity {
         agradecimientosBot.add("seguiré aquí por si me necesitas");
         agradecimientosBot.add("¡fue un trabajo en equipo!");
         agradecimientosBot.add("¡Estoy para ayudarte!");
-    }
 
-    /* La lista de los comandos que reconoce la aplicación */ {
+        /* La lista de los comandos que reconoce la aplicación */
         listaComandos.add(new Comandos(1,
                 new String[]{"fecha", "día"},
                 "Si usas la palabra fecha ó día, te diré la fecha del día de hoy"));
@@ -152,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 "Películas o series"));
 
         listaComandos.add(new Comandos(7,
-                new String[]{"puedes", "sabes", "comando", "comandos"},
+                new String[]{"puedes", "sabes", "comando", "comandos", "sabe"},
                 "Si usas algunas de las palabras puedes, sabes ó comandos, te diré los " +
                         "comandos sobre todo lo que puedo hacer actualmente"));
 
@@ -231,6 +244,14 @@ public class MainActivity extends AppCompatActivity {
                         "elección y buscar un dato en especifico"
         ));
 
+        listaComandos.add(new Comandos(18,
+                new String[]{"deletreo", "deletrear", "activar deletreo", "desactivar deletreo",
+                "deletrea"},
+                "Si dices activar deletreo, comenzará el protocolo que te permite formar " +
+                        "oraciones y diciendo desactivar deletreo, apagaras el protocolo y podrás " +
+                        "hablar normal"
+        ));
+
         //proyectos actuales, cosas por hacer
         //Guardar actividades para realizar con fecha, tipo calendario, dato random
         numeroComandos = listaComandos.size();
@@ -249,8 +270,14 @@ public class MainActivity extends AppCompatActivity {
         ttsManager = new TTSManager();
         ttsManager.init(getApplicationContext());
 
+        diferentesPalabrasClaves();
+
         //Cuando se presiona el imagebutton este comienza a escuchar
         img_btn_hablar.setOnClickListener(v -> iniciarEntradaVoz());
+    }
+
+    private void diferentesPalabrasClaves(){
+
     }
 
     /**
@@ -289,6 +316,17 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> speech = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     strSpeech2Text = speech.get(0);
                     grabar.setText(strSpeech2Text);
+
+                    strSpeech2Text = pasarPalabraNumero(strSpeech2Text);
+
+                    if(strSpeech2Text.toLowerCase().contains("deletreo")){
+                        if(deletrear){
+                            deletrear = false;
+                            formandoPalabra = "";
+                            hablando("Deletreo desactivado", 1000, true);
+                            return;
+                        }
+                    }
 
                     if(buscarDatoEspecifico(strSpeech2Text)){
                         return;
@@ -331,23 +369,46 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
 
-                    //Se valida si el texto es un saludo o una despedida
+                    //Por si no se cumplío ningún caso anterior
                     Toast.makeText(this, "aaaaaaaa", Toast.LENGTH_SHORT).show();
                 }
 
             }
     );
 
+    /**
+     * Este metodo pasa una palabra a numero
+     * @param texto texto de lo que dijo el usuario
+     * @return el texto que dijo el usuario o el numero
+     */
+    private String pasarPalabraNumero(String texto){
+        String caracter = numeros.get(texto);
+        if(caracter == null){
+            return texto;
+        }else{
+            return caracter;
+        }
+    }
+
+    /**
+     * Este metodo busca si la base de datos en la que quiere buscar el usuario existe
+     * @param texto mensaje proveniente del usuario (donde presuntamente debería estar el nombre
+     *              de la base de datos)
+     * @return true si la base de datos existe, sino retorna false
+     */
     public boolean buscarDatoEspecifico(String texto){
         if(buscandoBaseDato){
             for (Comandos c : listaComandos) {
                 for (String s : c.getComando()) {
                     if (texto.toLowerCase().contains(s.toLowerCase())) {
                         c.setEnProgreso(true);
-                        solicitarDatosNecesarios(c);
-                        buscandoBaseDato = false;
-                        buscandoDato = true;
-                        //readDataBase(c);
+                        if(c.getDatosInsertarBaseDatos() != null){
+                            solicitarDatosNecesarios(c);
+                            buscandoDato = true;
+                            buscandoBaseDato = false;
+                        }else{
+                            ttsManager.addQueue("Esa base de datos no existe");
+                        }
                         return true;
                     }
                 }
@@ -389,7 +450,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Con este metodo se validan los saludos y se envía un mensaje contestando dicho saludo
-     *
      * @param texto El saludo que se reconocio por voz
      */
     public boolean saludoDespedida(String texto) {
@@ -404,14 +464,8 @@ public class MainActivity extends AppCompatActivity {
 
                 String texto2Return = saludosBot.get(random);
                 respuesta.setText(texto2Return);
-                ttsManager.initQueue(texto2Return);
                 isGreeting = true;
-                try {
-                    while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                        Thread.sleep(2000);
-                    }
-                } catch (Exception ignored) {}
-                iniciarEntradaVoz();
+                hablando(texto2Return, 1500, true);
                 return false;
             }
         }
@@ -441,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
      * @return true si se usó el metodo, false si no
      */
     public boolean cancelarProceso(String texto) {
-        if (leyendo || algunaBaseDatosProgreso) {
+        if (leyendo || algunaBaseDatosProgreso || buscandoBaseDato || buscandoDato) {
             if (texto.contains("cance") || strSpeech2Text.toLowerCase().contains("olv")) {
                 resetearDatos("Ok. Cancelado");
                 puedeAgradecer = true;
@@ -513,19 +567,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Metodo para buscar el comando que el usuario solicitó
-     * @param texto Mensaje del usuario
-     * @return true si se usó el metodo, false si no
-     */
-    public boolean buscarComandoEjecutar(String texto){
-        if (isGreeting) { //if (isGreeting && !algunaBaseDatosProgreso) { ASI ESTABA ESTA LINEA POR SI ALGO SALE MAL
-            comandosParaEjecutar(texto);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Metodo que resetea los datos que se tenian almacenados y se estaban recopilando
      * (independientemente de la cantidad de datos obtenida hasta el momento) y los elimina y
      * reestablece las demás variables como 'leyendo', 'esperarConfirmacion', etc
@@ -554,28 +595,59 @@ public class MainActivity extends AppCompatActivity {
         puedeAgradecer = true;
         buscandoDato = false;
         buscandoBaseDato = false;
+        formandoPalabra = "";
     }
 
-
+    /**
+     * El metodo pide al usuario que rellene los datos que son necesarios para guardar un nuevo
+     * registro en la base de datos
+     * @param texto mensaje dicho por voz proveniente del usuario
+     */
     public void agregarDatosComando(String texto) {
         Comandos c = mirarBaseDatosEnProgreso();
         boolean ciclo = true;
         int i = 0;
         try {
+            //Los datos para saber que pedir y donde guardarlo
             String[] nuevosDatos = c.getDatosInsertarBaseDatos();
+            /*En el ciclo se se valida si esta el modo deletreo o no
+            *
+            * Si esta activado, va al metodo y concatena los caracteres, hasta formar la palabra y
+            * devuelve el indice 'i' a su valor anterior, ya que no se guardó ningún dato nuevo
+            * luego guarda la palabra en en el vector y dice el nombre del siguiente campo a llenar
+            *
+            * Si esta desactivado el deletreo, entonces guarda la palabra directamente, pide la
+            * siguiente y así hasta completar el vector de datos
+            *
+            * Si ya se llenarón los datos del vector, el ciclo se acaba y se esta buscando un dato
+            * especifico entonces va a un metodo de busqueda a base de datos o a otro metodo
+            *  */
             while (ciclo && i < nuevosDatos.length) {
+                //Si el campo en donde van los datos está vacío
                 if (i % 2 != 0 && nuevosDatos[i].equals("")) {
-                    nuevosDatos[i] = texto;
+                    if(!deletrear){ nuevosDatos[i] = texto; }
                     c.setDatosInsertarBaseDatos(nuevosDatos);
                     ciclo = false;
                     if (i < nuevosDatos.length - 1) {
-                        ttsManager.addQueue(c.getDatosInsertarBaseDatos()[i + 1]);
-                        try {
-                            while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                                Thread.sleep(2000);
+                        if(deletrear){
+                            nuevosDatos[i] = comandoDeletrear(texto);
+                            i--;
+                        }
+
+                        if(!deletrear){
+                            i++;
+                            if(formandoPalabra.equals("")){
+                                hablando(c.getDatosInsertarBaseDatos()[i], 2000, true);
+                            }else{
+                                hablando(c.getDatosInsertarBaseDatos()[i + 1], 2000, true);
                             }
-                        } catch (Exception ignored) {}
-                        iniciarEntradaVoz();
+                        }
+
+                        if(!(formandoPalabra.equals("")) && (!nuevosDatos[i + 1].equals(""))){
+                            deletrear = true;
+                            formandoPalabra = "";
+                        }
+
                     }
                     if (i == nuevosDatos.length - 1) {
                         ciclo = true;
@@ -594,7 +666,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Es para obtener el comando que agrega comandos sugeridos por el usuario
+     * @param texto 'Sugerir' ya que así se invoca el comando
+     * @return el objeto del comando 'sugerir comandos'
+     */
     public Comandos obtenerComandoPeticion(String texto) {
         for (Comandos c : listaComandos) {
             for (String s : c.getComando()) {
@@ -604,6 +680,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return new Comandos();
+    }
+
+    /**
+     * Metodo para buscar el comando que el usuario solicitó
+     * @param texto Mensaje del usuario
+     * @return true si se usó el metodo, false si no
+     */
+    public boolean buscarComandoEjecutar(String texto){
+        if (isGreeting) { //if (isGreeting && !algunaBaseDatosProgreso) { ASI ESTABA ESTA LINEA POR SI ALGO SALE MAL
+            comandosParaEjecutar(texto);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -689,6 +778,9 @@ public class MainActivity extends AppCompatActivity {
             case 17:
                 comandoBuscarDatoEspecifico(false);
                 break;
+            case 18:
+                comandoDeletrear("");
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -733,20 +825,18 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * Inicia el proceso para solicitar datos al usuario, diciendo el primer parametro y activando
+     * la entrada al metodo 'agregarDatosComando'
+     * @param c Objeto Comando del que se van a tomar los parametros para solicitar los datos
+     */
     public void solicitarDatosNecesarios(Comandos c) {
         for (int i = 0; i < c.getDatosInsertarBaseDatos().length; i++) {
             if (i % 2 != 0 && c.getDatosInsertarBaseDatos()[i].equals("")) {
                 algunaBaseDatosProgreso = true;
                 c.setEnProgreso(true);
-                ttsManager.addQueue(c.getDatosInsertarBaseDatos()[i - 1]);
                 respuesta.setText(c.getDatosInsertarBaseDatos()[i - 1]);
-                try {
-                    while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                        Thread.sleep(2000);
-                    }
-                } catch (Exception ignored) {
-                }
-                iniciarEntradaVoz();
+                hablando(c.getDatosInsertarBaseDatos()[i - 1], 2000, true);
                 i = c.getDatosInsertarBaseDatos().length;
             }
         }
@@ -792,6 +882,10 @@ public class MainActivity extends AppCompatActivity {
         puedeAgradecer = true;
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos una nueva persona
+     * @param c El comando personas
+     */
     private void comandoPersonas(Comandos c) {
         solicitarDatosNecesarios(c);
         if ((c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0) &&
@@ -805,6 +899,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos una nueva idea de programación
+     * @param c El comando Ideas
+     */
     private void comandoIdeas(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -816,6 +914,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos un nuevo juego rescatado
+     * @param c El comando juegos rescatados
+     */
     private void comandoJuegos(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -825,6 +927,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos una nueva película o serie
+     * @param c El comando películas o series
+     */
     private void comandoPeliculasSeries(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -835,6 +941,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para decir las funcionalidad del bot, es decir, los comandos que puede ejecutar el bot
+     */
     private void comandoComandos() {
         StringBuilder comandos = new StringBuilder();
         for (Comandos c : listaComandos) {
@@ -861,6 +970,11 @@ public class MainActivity extends AppCompatActivity {
         puedeAgradecer = true;
     }
 
+    /**
+     * Pregunta que base de datos quiere leer y mira si existe, si es así toma el objeto y realiza
+     * la consulta a la base de datos y reproduce los registros obtenidos
+     * @param texto El comando que tiene las rutas de acceso a la base de datos que se quiere leer
+     */
     private void comandoLeer(String texto) {
         if (leyendo) {
             for (Comandos c : listaComandos) {
@@ -874,17 +988,14 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             leyendo = true;
-            ttsManager.addQueue("¿Que base de datos quieres consultar?");
-            try {
-                while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                    Thread.sleep(500);
-                }
-            } catch (Exception ignored) {
-            }
-            iniciarEntradaVoz();
+            hablando("¿Que base de datos quieres consultar?", 500, true);
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos una nueva cosa por hacer
+     * @param c El comando cosas TODO
+     */
     private void comandoCosasToDo(Comandos c) {
         //String dia = tomarDiaSeleccionado(texto);
         solicitarDatosNecesarios(c);
@@ -899,6 +1010,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos un nuevo comando sugerido
+     * @param c El comando comandos sugeridos
+     */
     private void comandoSugerirComandos(Comandos c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -910,6 +1025,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos un nuevo archivo o papeles
+     * @param c El comando archivos - papeles - documentos
+     */
     private void comandoArchivos(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -920,6 +1039,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos un nuevo libro
+     * @param c El comando libros
+     */
     private void comandoLibros(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -931,6 +1054,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos un nuevo cumpleaños
+     * @param c El comando cumpleaños
+     */
     private void comandoBirthDay(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -941,6 +1068,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos una nueva cosa por comprar
+     * @param c El comando de las cosas por comprar
+     */
     private void comandoCosasToBuy(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -952,6 +1083,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para pedir datos y guardar en la base de datos una nueva frase
+     * @param c El comando frases
+     */
     private void comandoFrases(Comandos c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -962,6 +1097,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * El metodo sirve para decir cuantas y cuales son las bases de datos a las que puede acceder el bot
+     */
     private void comandoBasesDatos(){
         int nBasesDatos = 0;
         ArrayList<String> basesDatos = new ArrayList<>();
@@ -989,22 +1127,77 @@ public class MainActivity extends AppCompatActivity {
         puedeAgradecer = true;
     }
 
+    /**
+     * El metodo sirve para buscar un dato especifico en la base de datos
+     */
     private void comandoBuscarDatoEspecifico(boolean llenos){
         if(llenos){
             readSpecificDataBase(mirarBaseDatosEnProgreso());
         }else{
-            ttsManager.addQueue("¿En cual base de datos quieres buscar?");
             buscandoBaseDato = true;
-            try {
-                while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                    Thread.sleep(1500);
-                }
-            } catch (Exception ignored) {}
-            iniciarEntradaVoz();
+            hablando("¿En cual base de datos quieres buscar?", 1500, true);
         }
-
-
     }
+
+    /**
+     * Sirve para concatenar los caracteres elegidos por el usuario además de iniciar el deletreo
+     * y sus validaciones
+     * @param texto caracter
+     * @return la palabra o frase completa
+     */
+    private String comandoDeletrear(String texto){
+        if(deletrear){
+            try{
+                int num = Integer.parseInt(texto);
+                agregarCaracter(num);
+            }catch(Exception ignored){
+                if(!(texto.equalsIgnoreCase("listo"))){
+                    ttsManager.addQueue("Tienes que decir un numero de la lista");
+                }
+            }
+
+            if(texto.equals("listo")){
+                deletrear = false;
+                ttsManager.addQueue("La palabra formada es " + formandoPalabra);
+                return formandoPalabra;
+            }
+        }else{
+            deletrear = true;
+            ttsManager.addQueue("Deletreo activado");
+            respuesta.setText(strAbecedario);
+            //hablando(1500);
+        }
+        return "";
+    }
+
+    /**
+     * Concatena los caracteres, dice el caracter elegido y muestra el progreso de la frase
+     * @param num
+     */
+    private void agregarCaracter(int num){
+        String caracter = abecedario.get(num + "");
+        formandoPalabra += caracter;
+        respuesta.setText(strAbecedario);
+        grabar.setText(formandoPalabra);
+        hablando("Agregada la letra " + caracter, 1000, true);
+    }
+
+    /**
+     * Es para reproducir un mensaje para el usuario, esperar a que se acabe e iniciar una entrada de voz
+     * @param mensaje Mensaje para el usuario
+     * @param time Tiempo en segundo de espera para validar si ya acabó de hablar
+     * @param iniciar Saber si se inicia o no la entrada de voz
+     */
+    private void hablando(String mensaje, int time, boolean iniciar){
+        ttsManager.addQueue(mensaje);
+        try {
+            while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
+                Thread.sleep(time);
+            }
+        } catch (Exception ignored) {}
+        if(iniciar){ iniciarEntradaVoz(); }
+    }
+
 /*
     /**
      * @param texto Texto ingresado por el ususario que contiene el día seleccionado para la consulta
@@ -1020,9 +1213,9 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     /**
-     * Method where the user validate and register in the postgresql
-     *
-     * @param datos asdf
+     * Metodo donde se registran los datos que se tomaron del usuario
+     * @param datos Mapa de los datos a guardar con sus parametros
+     * @param c Objeto para tomar las rutas y parametros de donde se van a guardar los datos
      */
     private void recordGeneral(Map<String, String> datos, Comandos c) {
         if (!esperarConfirmacion) {
@@ -1076,6 +1269,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Consulta una base de datos y muestra los resultados
+     * @param c Comando que se eligio para consultar la base de datos
+     */
     private void readDataBase(Comandos c) {
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
@@ -1136,6 +1333,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Consulta una base de datos y muestra los resultados de los datos que coincidan con los proporcionados
+     * @param c Comando que se eligio para consultar la base de datos
+     */
     private void readSpecificDataBase(Comandos c) {
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
@@ -1151,6 +1352,7 @@ public class MainActivity extends AppCompatActivity {
                                 StringBuilder mostrar = new StringBuilder();
                                 String leer = "";
                                 toLowerCase(datosBuscar);
+                                int l = 0;
 
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject jlo = array.getJSONObject(i);
@@ -1163,10 +1365,16 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    toLowerCase(datosLeidos);
+                                    datosLeidos = toLowerCase(datosLeidos);
                                      if(coincidencias(datosLeidos, datosBuscar, 0)){
+                                         if(l == 0){
+                                             ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
+                                             hablando("", 800, false);
+                                             l++;
+                                         }
                                         String[] nombresCampos = c.getDatosInsertarBaseDatos();
                                         for (int k = 0; k < datosLeidos.length; k++) {
+                                            leer = "";
                                             if (k % 2 == 0) {
                                                 leer += nombresCampos[k] + ".";
                                                 mostrar.append(nombresCampos[k]).append(": ");
@@ -1174,7 +1382,7 @@ public class MainActivity extends AppCompatActivity {
                                                 leer += datosLeidos[k];
                                                 mostrar.append(datosLeidos[k]).append(".\n");
                                             }
-                                            //ttsManager.addQueue(leer);
+                                            ttsManager.addQueue(leer);
                                         }
                                     }
 
@@ -1184,8 +1392,6 @@ public class MainActivity extends AppCompatActivity {
                                     ttsManager.addQueue("Lo lamento. No hay registros similares en la base de datos");
                                     ttsManager.addQueue("¿Algo más qué quieras hacer?");
                                 }else{
-                                    ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
-                                    ttsManager.addQueue(leer);
                                     ttsManager.addQueue("Listo. ¿Qué más quieres hacer?");
                                 }
 
@@ -1210,6 +1416,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Pone todos los Strings del vector en minúsculas
+     * @param datos vector de datos
+     * @return retorna los datos en minúsculas
+     */
     public String[] toLowerCase(String[] datos){
         for(int i = 0; i < datos.length; i++){
             datos[i] = datos[i].toLowerCase();
@@ -1217,7 +1428,14 @@ public class MainActivity extends AppCompatActivity {
         return datos;
     }
 
-
+    /**
+     * Busca las coincidencias entre los datos especificos dados por el usuario y los obtenidos de
+     * la base de datos de manera recursiva para analizar todos los campos del vector
+     * @param datosLeidos Los datos obtenidos mediante la consulta de la base de datos
+     * @param datosBuscados Los datos proporcionados por el usuario
+     * @param i Iterador para buscar solo los datos que son consulta y no los parametros de busqueda
+     * @return true si hay coincidencias, false si no las hay
+     */
     public boolean coincidencias(String[] datosLeidos, String[] datosBuscados, int i){
         if(i < datosLeidos.length){
             if (i % 2 != 0) {
@@ -1236,9 +1454,14 @@ public class MainActivity extends AppCompatActivity {
         }else{
             return false;
         }
-        //return coincidencias(datosLeidos, datosBuscados, i + 1);
     }
 
+    /**
+     * Pide la confirmacion al usuario para saber si guarda o no los datos en la base de datos,
+     * proporcionando los datos completos de lo que se va a guardar si confirma la petición
+     * @param c Objeto del comando del que se van a guardar los datos en la base de datos
+     * @throws InterruptedException Es para tener control por si ocurre alguna excepción
+     */
     public void pedirConfirmacion(Comandos c) throws InterruptedException {
         if (esperarConfirmacion) {
             llamadoComando(c.getNumeroComando(), c, "");
@@ -1247,15 +1470,14 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < c.getDatosInsertarBaseDatos().length; i++) {
                 ttsManager.addQueue(c.getDatosInsertarBaseDatos()[i] + ".");
             }
-            while (ttsManager.getIsSpeaking()) {
-                //noinspection BusyWait
-                Thread.sleep(1000);
-            }
-            iniciarEntradaVoz();
+            hablando("", 1000, true);
             esperarConfirmacion = true;
         }
     }
 
+    /**
+     * El hilo que controla el cierre de la aplicación
+     */
     class Hilo1 extends Thread {
         @Override
         public void run() {
@@ -1278,6 +1500,9 @@ public class MainActivity extends AppCompatActivity {
         return df.format(c.getTime());
     }
 
+    /**
+     * Metodo que cierra la aplicación
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
