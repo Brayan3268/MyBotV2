@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton img_btn_hablar;
 
     int numeroComandos, contador = 0;
-    String strSpeech2Text = "", textoRepetido = "", mostrar = "", formandoPalabra = "";
+    String strSpeech2Text = "", textoRepetido = "", mostrar = "", formandoPalabra = "",
+        palabraParcial = "";
     final String strAbecedario;
     final String[] diasSemana = new String[9];
     boolean isGreeting, isGoodbyes, esperarConfirmacion, puedeAgradecer, leyendo,
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         abecedario.put("22","u"); abecedario.put("23","v"); abecedario.put("24","w");
         abecedario.put("25","x"); abecedario.put("26","y"); abecedario.put("27","z");
         abecedario.put("28", " "); abecedario.put("29", ", "); abecedario.put("30", ".");
+        abecedario.put("31", ":");
 
         for (Map.Entry<String, String> entry : abecedario.entrySet()) {
             if(entry.getValue().equals(" ")){
@@ -322,8 +324,13 @@ public class MainActivity extends AppCompatActivity {
                     if(strSpeech2Text.toLowerCase().contains("deletreo")){
                         if(deletrear){
                             deletrear = false;
+                            if(formandoPalabra.equals("")){
+                                hablando("Deletreo desactivado", 1000, true);
+                            }else{
+                                palabraParcial = formandoPalabra;
+                                hablando("Deletreo desactivado y frase parcial guardada", 1000, true);
+                            }
                             formandoPalabra = "";
-                            hablando("Deletreo desactivado", 1000, true);
                             return;
                         }
                     }
@@ -574,28 +581,32 @@ public class MainActivity extends AppCompatActivity {
      */
     public void resetearDatos(String texto) {
         ttsManager.addQueue(texto);
-        algunaBaseDatosProgreso = false;
         Comandos c = mirarBaseDatosEnProgreso();
         if (c != null) {
             c.setEnProgreso(false);
             c.setConfirmacion(false);
             String[] nuevosDatos = c.getDatosInsertarBaseDatos();
-            for (int i = 0; i < c.getDatosInsertarBaseDatos().length; i++) {
-                if (i % 2 != 0) {
-                    nuevosDatos[i] = "";
+            if(nuevosDatos != null){
+                for (int i = 0; i < c.getDatosInsertarBaseDatos().length; i++) {
+                    if (i % 2 != 0) {
+                        nuevosDatos[i] = "";
+                    }
                 }
+                c.setDatosInsertarBaseDatos(nuevosDatos);
             }
-            c.setDatosInsertarBaseDatos(nuevosDatos);
         }
 
-        esperarConfirmacion = false;
         /*assert c != null;
         c.setConfirmacion(false);*/
+        algunaBaseDatosProgreso = false;
+        esperarConfirmacion = false;
         leyendo = false;
         puedeAgradecer = true;
         buscandoDato = false;
         buscandoBaseDato = false;
         formandoPalabra = "";
+        deletrear = false;
+        palabraParcial = "";
     }
 
     /**
@@ -625,7 +636,10 @@ public class MainActivity extends AppCompatActivity {
             while (ciclo && i < nuevosDatos.length) {
                 //Si el campo en donde van los datos está vacío
                 if (i % 2 != 0 && nuevosDatos[i].equals("")) {
-                    if(!deletrear){ nuevosDatos[i] = texto; }
+                    if(!deletrear){
+                        nuevosDatos[i] = palabraParcial + texto;
+                        palabraParcial = "";
+                    }
                     c.setDatosInsertarBaseDatos(nuevosDatos);
                     ciclo = false;
                     if (i < nuevosDatos.length - 1) {
@@ -1147,14 +1161,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private String comandoDeletrear(String texto){
         if(deletrear){
-            try{
-                int num = Integer.parseInt(texto);
-                agregarCaracter(num);
-            }catch(Exception ignored){
-                if(!(texto.equalsIgnoreCase("listo"))){
-                    ttsManager.addQueue("Tienes que decir un numero de la lista");
-                }
-            }
+            agregarCaracter(texto);
 
             if(texto.equals("listo")){
                 deletrear = false;
@@ -1165,21 +1172,39 @@ public class MainActivity extends AppCompatActivity {
             deletrear = true;
             ttsManager.addQueue("Deletreo activado");
             respuesta.setText(strAbecedario);
-            //hablando(1500);
         }
         return "";
     }
 
     /**
      * Concatena los caracteres, dice el caracter elegido y muestra el progreso de la frase
-     * @param num
+     * @param txt El mensaje que proporciona el usuario presuntamente con numeros
      */
-    private void agregarCaracter(int num){
-        String caracter = abecedario.get(num + "");
-        formandoPalabra += caracter;
-        respuesta.setText(strAbecedario);
-        grabar.setText(formandoPalabra);
-        hablando("Agregada la letra " + caracter, 1000, true);
+    private void agregarCaracter(String txt){
+        if(txt.contains("-")){
+            String[] numeros = txt.split("-");
+            for (String n : numeros){
+                obtenerCaracter(n.trim(), false);
+            }
+        }else{
+            obtenerCaracter(txt, true);
+        }
+
+    }
+
+    private void obtenerCaracter(String txtNum, boolean entradaVoz){
+        try {
+            int num = Integer.parseInt(txtNum);
+            String caracter = abecedario.get(num + "");
+            formandoPalabra += caracter;
+            respuesta.setText(strAbecedario);
+            grabar.setText(formandoPalabra);
+            hablando("Agregada la letra " + caracter, 1000, entradaVoz);
+        } catch (Exception ignored) {
+            if(!(txtNum.equalsIgnoreCase("listo"))){
+                ttsManager.addQueue("Tienes que decir un numero de la lista");
+            }
+        }
     }
 
     /**
@@ -1286,6 +1311,7 @@ public class MainActivity extends AppCompatActivity {
                                 JSONArray array = response.getJSONArray("data");
                                 ttsManager.addQueue("Los datos son:");
                                 StringBuilder mostrar = new StringBuilder();
+                                int cont = 0;
 
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject jlo = array.getJSONObject(i);
@@ -1297,6 +1323,9 @@ public class MainActivity extends AppCompatActivity {
                                             datosLeidos[j + 1] = jlo.getString(datosLeidos[j]);
                                         }
                                     }
+
+                                    cont++;
+                                    mostrar.append(cont).append(") ");
 
                                     String[] nombresCampos = c.getDatosInsertarBaseDatos();
                                     for (int k = 0; k < datosLeidos.length; k++) {
@@ -1310,6 +1339,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         ttsManager.addQueue(leer);
                                     }
+                                    mostrar.append("\n");
+
                                 }
 
                                 respuesta.setText(mostrar.toString());
@@ -1352,7 +1383,7 @@ public class MainActivity extends AppCompatActivity {
                                 StringBuilder mostrar = new StringBuilder();
                                 String leer = "";
                                 toLowerCase(datosBuscar);
-                                int l = 0;
+                                int l = 0, cont = 0;
 
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject jlo = array.getJSONObject(i);
@@ -1366,12 +1397,14 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     datosLeidos = toLowerCase(datosLeidos);
-                                     if(coincidencias(datosLeidos, datosBuscar, 0)){
-                                         if(l == 0){
-                                             ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
-                                             hablando("", 800, false);
-                                             l++;
-                                         }
+                                    if(coincidencias(datosLeidos, datosBuscar, 0)){
+                                        if(l == 0){
+                                            ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
+                                            hablando("", 800, false);
+                                            l++;
+                                        }
+                                        cont++;
+                                        mostrar.append(cont).append(") ");
                                         String[] nombresCampos = c.getDatosInsertarBaseDatos();
                                         for (int k = 0; k < datosLeidos.length; k++) {
                                             leer = "";
@@ -1384,6 +1417,7 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                             ttsManager.addQueue(leer);
                                         }
+                                        mostrar.append("\n");
                                     }
 
                                 }
