@@ -7,6 +7,14 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!--suppress AndroidElementNotAllowed -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -15,9 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBotV2">
-        <activity android:name=".MainListenKeyWord"></activity>
-        <activity android:name=".classMne.MainActivityPrueba" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".classMne.MainActivityPrueba"/>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
