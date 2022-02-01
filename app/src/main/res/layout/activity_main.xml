@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/txtGrabarVoz"
+            android:id="@+id/tvGrabarVoz"
             android:textSize="22dp"
             android:layout_centerHorizontal="true"
             android:gravity="center"
@@ -38,10 +38,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/txtGrabarRes"
+            android:id="@+id/tvGrabarRes"
             android:textSize="22dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="-40dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvMostrarCaracteres"
+            android:textSize="22dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:textColor="#000000"
             />

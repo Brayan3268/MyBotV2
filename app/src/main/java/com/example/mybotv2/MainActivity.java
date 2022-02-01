@@ -38,7 +38,7 @@ import static android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView grabar, respuesta;
+    TextView grabar, respuesta, tvMostrarCaracteres;
     ImageButton img_btn_hablar;
 
     int numeroComandos, contador = 0;
@@ -75,13 +75,22 @@ public class MainActivity extends AppCompatActivity {
         abecedario.put("22","u"); abecedario.put("23","v"); abecedario.put("24","w");
         abecedario.put("25","x"); abecedario.put("26","y"); abecedario.put("27","z");
         abecedario.put("28", " "); abecedario.put("29", ", "); abecedario.put("30", ".");
-        abecedario.put("31", ":");
+        abecedario.put("31", ": "); abecedario.put("32", "-"); abecedario.put("33", " - ");
+        abecedario.put("34", "¿"); abecedario.put("35", "?");
 
         for (Map.Entry<String, String> entry : abecedario.entrySet()) {
             if(entry.getValue().equals(" ")){
-                mostrar += "(Espacio)" + " --> " + entry.getValue() + "\n";
+                mostrar += entry.getKey() + " --> " + "(Espacio)" + "\n";
             }else{
-                mostrar += entry.getKey() + " --> " + entry.getValue() + "\n";
+                if(entry.getValue().equals(" - ")){
+                    mostrar += entry.getKey() + " --> " + "( - )" + "\n";
+                }else{
+                    if(entry.getValue().equals("-")){
+                        mostrar += entry.getKey() + " --> " + "(-)" + "\n";
+                    }else{
+                        mostrar += entry.getKey() + " --> " + entry.getValue() + "\n";
+                    }
+                }
             }
         }
         mostrar += "Cuando termines de deletrear di 'listo'.";
@@ -205,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
         listaComandos.add(new Comandos(12,
                 new String[]{"libro", "libros"},
-                "Si usas la palabra libro, podras añadir un libro leído a la base de datos",
+                "Si usas la palabra libro, podras añadir un libro leido a la base de datos",
                 new String[]{"Nombre", "", "Autor", "", "Valoración", ""},
                 new String[]{Constants.URL_BOOKS_INSERT, Constants.URL_BOOKS_SELECT},
                 new String[]{"bookname", "", "author", "", "assessment", ""},
@@ -243,15 +252,15 @@ public class MainActivity extends AppCompatActivity {
         listaComandos.add(new Comandos(17,
                 new String[]{"busca", "buscar"},
                 "Si dices la palabra buscar podrás consultar una base de datos de tu " +
-                        "elección y buscar un dato en especifico"
+                        "elección y buscar un dato en específico"
         ));
 
         listaComandos.add(new Comandos(18,
                 new String[]{"deletreo", "deletrear", "activar deletreo", "desactivar deletreo",
                 "deletrea"},
                 "Si dices activar deletreo, comenzará el protocolo que te permite formar " +
-                        "oraciones y diciendo desactivar deletreo, apagaras el protocolo y podrás " +
-                        "hablar normal"
+                        "oraciones deletreando y diciendo desactivar deletreo, apagarás el protocolo y podrás " +
+                        "hablarme normal"
         ));
 
         //proyectos actuales, cosas por hacer
@@ -266,9 +275,10 @@ public class MainActivity extends AppCompatActivity {
         AndroidNetworking.initialize(getApplicationContext());
 
         //Se inicializan los componentes
-        grabar = findViewById(R.id.txtGrabarVoz);
-        respuesta = findViewById(R.id.txtGrabarRes);
+        grabar = findViewById(R.id.tvGrabarVoz);
+        respuesta = findViewById(R.id.tvGrabarRes);
         img_btn_hablar = findViewById(R.id.img_btn_hablar);
+        tvMostrarCaracteres = findViewById(R.id.tvMostrarCaracteres);
         ttsManager = new TTSManager();
         ttsManager.init(getApplicationContext());
 
@@ -325,10 +335,12 @@ public class MainActivity extends AppCompatActivity {
                         if(deletrear){
                             deletrear = false;
                             if(formandoPalabra.equals("")){
+                                tvMostrarCaracteres.setText("");
                                 hablando("Deletreo desactivado", 1000, true);
                             }else{
                                 palabraParcial = formandoPalabra;
                                 hablando("Deletreo desactivado y frase parcial guardada", 1000, true);
+                                tvMostrarCaracteres.setText("Frase formada: " + palabraParcial);
                             }
                             formandoPalabra = "";
                             return;
@@ -1171,7 +1183,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             deletrear = true;
             ttsManager.addQueue("Deletreo activado");
-            respuesta.setText(strAbecedario);
+            tvMostrarCaracteres.setText(strAbecedario);
         }
         return "";
     }
@@ -1197,7 +1209,6 @@ public class MainActivity extends AppCompatActivity {
             int num = Integer.parseInt(txtNum);
             String caracter = abecedario.get(num + "");
             formandoPalabra += caracter;
-            respuesta.setText(strAbecedario);
             grabar.setText(formandoPalabra);
             hablando("Agregada la letra " + caracter, 1000, entradaVoz);
         } catch (Exception ignored) {
@@ -1299,6 +1310,7 @@ public class MainActivity extends AppCompatActivity {
      * @param c Comando que se eligio para consultar la base de datos
      */
     private void readDataBase(Comandos c) {
+        ttsManager.addQueue("Buscando");
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -1369,6 +1381,7 @@ public class MainActivity extends AppCompatActivity {
      * @param c Comando que se eligio para consultar la base de datos
      */
     private void readSpecificDataBase(Comandos c) {
+        ttsManager.addQueue("Buscando");
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
                 .build()

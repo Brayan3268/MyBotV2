@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBotV2">
+        <activity android:name=".MainListenKeyWord"></activity>
         <activity android:name=".classMne.MainActivityPrueba" />
         <activity android:name=".MainActivity">
             <intent-filter>
