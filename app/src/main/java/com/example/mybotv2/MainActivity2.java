@@ -166,7 +166,7 @@ public class MainActivity2 extends AppCompatActivity implements RecognitionListe
             if (result.contains("Celeste")) {
                 Toast.makeText(getApplicationContext(), "SIUUUUUUU", Toast.LENGTH_LONG).show();
                 speech.destroy();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                super.startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
             text += result + "\n";
         }

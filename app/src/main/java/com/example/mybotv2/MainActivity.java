@@ -10,7 +10,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton img_btn_hablar;
 
     int numeroComandos, contador = 0;
-    String strSpeech2Text = "", textoRepetido = "", mostrar = "", formandoPalabra = "",
+    String strSpeech2Text = "", textoRepetido = "", mostrar, formandoPalabra = "",
         palabraParcial = "";
     final String strAbecedario;
     final String[] diasSemana = new String[9];
@@ -77,23 +76,12 @@ public class MainActivity extends AppCompatActivity {
         abecedario.put("25","x"); abecedario.put("26","y"); abecedario.put("27","z");
         abecedario.put("28", " "); abecedario.put("29", ", "); abecedario.put("30", ".");
         abecedario.put("31", ": "); abecedario.put("32", "-"); abecedario.put("33", " - ");
-        abecedario.put("34", "¿"); abecedario.put("35", "?");
+        abecedario.put("34", "¿"); abecedario.put("35", "?"); abecedario.put("36", "á");
+        abecedario.put("37", "é"); abecedario.put("38", "í"); abecedario.put("39", "ó");
+        abecedario.put("40", "ú"); abecedario.put("41", "ü"); abecedario.put("42", "¡");
+        abecedario.put("43", "!");
 
-        for (Map.Entry<String, String> entry : abecedario.entrySet()) {
-            if(entry.getValue().equals(" ")){
-                mostrar += entry.getKey() + " --> " + "(Espacio)" + "\n";
-            }else{
-                if(entry.getValue().equals(" - ")){
-                    mostrar += entry.getKey() + " --> " + "( - )" + "\n";
-                }else{
-                    if(entry.getValue().equals("-")){
-                        mostrar += entry.getKey() + " --> " + "(-)" + "\n";
-                    }else{
-                        mostrar += entry.getKey() + " --> " + entry.getValue() + "\n";
-                    }
-                }
-            }
-        }
+        mostrar = ordenarCaracteres(abecedario);
         mostrar += "Cuando termines de deletrear di 'listo'.";
         strAbecedario = mostrar;
 
@@ -104,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* Los mensajes para que el bot sepa que es un saludo y que es una despedida y que responder */
         saludos.add("hola"); saludos.add("buenos días"); saludos.add("buenas tardes");
-        saludos.add("buenas noches"); saludos.add("buenas"); saludos.add("buenos");
+        saludos.add("buenas noches"); saludos.add("buenas"); //saludos.add("buenos");
 
         saludosBot.add("Hola. ¿Que quieres hacer hoy?");
         saludosBot.add("Espero que estés teniendo un lindo día. ¿Que te gustaria hacer?");
@@ -263,6 +251,16 @@ public class MainActivity extends AppCompatActivity {
                         "oraciones deletreando y diciendo desactivar deletreo, apagarás el protocolo y podrás " +
                         "hablarme normal"
         ));
+        
+        listaComandos.add(new Comandos(19, 
+                new String[]{"curioso", "curios", "dato curioso"},
+                "Si dices la frase dato curioso puedes agregar un dato que te parezca " +
+                        "interesante a la base de datos",
+                new String[]{"dato", ""},
+                new String[]{Constants.URL_CURIOS_DATA_INSERT, Constants.URL_CURIOS_DATA_SELECT},
+                new String[]{"curiousdata", ""},
+                "datos curiosos"
+        ));
 
         //proyectos actuales, cosas por hacer
         //Guardar actividades para realizar con fecha, tipo calendario, dato random
@@ -287,16 +285,39 @@ public class MainActivity extends AppCompatActivity {
 
         //Cuando se presiona el imagebutton este comienza a escuchar
         img_btn_hablar.setOnClickListener(v -> iniciarEntradaVoz());
-        /*img_btn_hablar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainListenKeyWord.class));
-            }
-        });*/
     }
 
     private void diferentesPalabrasClaves(){
 
+    }
+
+    private String ordenarCaracteres(Map<String, String> abc){
+        StringBuilder newAbc = new StringBuilder();
+        String i = "1";
+        int i2 = 1, max = abc.size();
+
+        while(i2 <= max){
+            for (Map.Entry<String, String> entry : abc.entrySet()) {
+                if(i.equals(entry.getKey())){
+                    if(entry.getValue().equals(" ")){
+                        newAbc.append(entry.getKey()).append(" --> ").append("(Espacio)").append("\n");
+                    }else{
+                        if(entry.getValue().equals(" - ")){
+                            newAbc.append(entry.getKey()).append(" --> ").append("( - )").append("\n");
+                        }else{
+                            if(entry.getValue().equals("-")){
+                                newAbc.append(entry.getKey()).append(" --> ").append("(-)").append("\n");
+                            }else{
+                                newAbc.append(entry.getKey()).append(" --> ").append(entry.getValue()).append("\n");
+                            }
+                        }
+                    }
+                    i2++;
+                    i = i2 + "";
+                }
+            }
+        }
+        return newAbc.toString();
     }
 
     /**
@@ -334,9 +355,10 @@ public class MainActivity extends AppCompatActivity {
                     assert data != null;
                     ArrayList<String> speech = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     strSpeech2Text = speech.get(0);
-                    grabar.setText(strSpeech2Text);
 
                     strSpeech2Text = pasarPalabraNumero(strSpeech2Text);
+                    strSpeech2Text = pasarDosPuntosPalabra(strSpeech2Text);
+                    grabar.setText(strSpeech2Text);
 
                     if(strSpeech2Text.toLowerCase().contains("deletreo")){
                         if(deletrear){
@@ -347,7 +369,8 @@ public class MainActivity extends AppCompatActivity {
                             }else{
                                 palabraParcial = formandoPalabra;
                                 hablando("Deletreo desactivado y frase parcial guardada", 1000, true);
-                                tvMostrarCaracteres.setText("Frase formada: " + palabraParcial);
+                                String palabraMsj = "Frase formada: " + palabraParcial;
+                                tvMostrarCaracteres.setText(palabraMsj);
                             }
                             formandoPalabra = "";
                             return;
@@ -401,6 +424,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
     );
+
+    private String pasarDosPuntosPalabra(String texto){
+        if(texto.contains("2 puntos")){
+            return texto.replace(" 2 puntos ", ": ");
+        }else{
+            return texto;
+        }
+    }
 
     /**
      * Este metodo pasa una palabra a numero
@@ -626,6 +657,7 @@ public class MainActivity extends AppCompatActivity {
         formandoPalabra = "";
         deletrear = false;
         palabraParcial = "";
+        tvMostrarCaracteres.setText("");
     }
 
     /**
@@ -814,6 +846,9 @@ public class MainActivity extends AppCompatActivity {
             case 18:
                 comandoDeletrear("");
                 break;
+            case 19:
+                comandoDatosCuriosos(comando);
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -969,7 +1004,7 @@ public class MainActivity extends AppCompatActivity {
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
             datos.put("nameMovieOrSerie", c.getDatosInsertarBaseDatos()[1]);
-            datos.put("typeMS", c.getDatosInsertarBaseDatos()[3]);
+            datos.put("typeMS", (c.getDatosInsertarBaseDatos()[3].toLowerCase().contains("película")) ? "película" : c.getDatosInsertarBaseDatos()[3]);
             recordGeneral(datos, c);
         }
     }
@@ -1136,7 +1171,7 @@ public class MainActivity extends AppCompatActivity {
     private void comandoBasesDatos(){
         int nBasesDatos = 0;
         ArrayList<String> basesDatos = new ArrayList<>();
-        String res = "";
+        StringBuilder res = new StringBuilder();
 
         for (Comandos c : listaComandos){
             if(c.getNombreBaseDatos() != null){
@@ -1154,9 +1189,9 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 ttsManager.addQueue(basesDatos.get(i));
             }
-            res += basesDatos.get(i) + ". ";
+            res.append(basesDatos.get(i)).append(". ");
         }
-        respuesta.setText(res);
+        respuesta.setText(res.toString());
         puedeAgradecer = true;
     }
 
@@ -1226,6 +1261,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Metodo para agregar datos curiosos obtenidos mediante el usuario por voz
+     * @param c Comando de los datos curiosos
+     */
+    private void comandoDatosCuriosos(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("curiousdata", c.getDatosInsertarBaseDatos()[1]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    /**
      * Es para reproducir un mensaje para el usuario, esperar a que se acabe e iniciar una entrada de voz
      * @param mensaje Mensaje para el usuario
      * @param time Tiempo en segundo de espera para validar si ya acabó de hablar
@@ -1291,6 +1339,7 @@ public class MainActivity extends AppCompatActivity {
                         if (respuesta.equals("200")) {
                             Toast.makeText(getApplicationContext(), "Registro insertado con exito", Toast.LENGTH_LONG).show();
                             resetearDatos("Listo, ya fue agregado a la base de datos");
+                            tvMostrarCaracteres.setText("");
                             puedeAgradecer = true;
                         }
                     } catch (JSONException e) {

@@ -26,4 +26,6 @@ public class Constants {
     public final static String URL_THINGS_TO_BUY_SELECT = URL_WEB_SERVICE + "things_to_buy_SELECT.php";
     public final static String URL_PHRASES_INSERT = URL_WEB_SERVICE + "phrase_INSERT.php";
     public final static String URL_PHRASES_SELECT = URL_WEB_SERVICE + "phrase_SELECT.php";
+    public final static String URL_CURIOS_DATA_INSERT = URL_WEB_SERVICE + "curious_data_INSERT.php";
+    public final static String URL_CURIOS_DATA_SELECT = URL_WEB_SERVICE + "curious_data_SELECT.php";
 }
