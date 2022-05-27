@@ -360,23 +360,11 @@ public class MainActivity extends AppCompatActivity {
                     strSpeech2Text = pasarDosPuntosPalabra(strSpeech2Text);
                     grabar.setText(strSpeech2Text);
 
-                    if(strSpeech2Text.toLowerCase().contains("deletreo")){
-                        if(deletrear){
-                            deletrear = false;
-                            if(formandoPalabra.equals("")){
-                                tvMostrarCaracteres.setText("");
-                                hablando("Deletreo desactivado", 1000, true);
-                            }else{
-                                palabraParcial = formandoPalabra;
-                                hablando("Deletreo desactivado y frase parcial guardada", 1000, true);
-                                String palabraMsj = "Frase formada: " + palabraParcial;
-                                tvMostrarCaracteres.setText(palabraMsj);
-                            }
-                            formandoPalabra = "";
-                            return;
-                        }
+                    if(desactivarDeletreo(strSpeech2Text)){
+                        return;
                     }
 
+                    //Es para activar o desactivar el deletreo y guardar palabras
                     if(buscarDatoEspecifico(strSpeech2Text)){
                         return;
                     }
@@ -419,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     //Por si no se cumplío ningún caso anterior
-                    Toast.makeText(this, "aaaaaaaa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No se cumplío ningún comando", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -445,6 +433,42 @@ public class MainActivity extends AppCompatActivity {
         }else{
             return caracter;
         }
+    }
+
+    /**
+     * Metodo para activar o desactivar deletreo y loq que debe hacer en cada caso
+     *
+     * Caso 1) Lo desactiva
+     * Caso 2) Lo desactiva sin haber terminado la frase: guarda la frase parcial y lo comunica al
+     *         usuario para que este termine la frase de ese dato.
+     * Caso 3) Activa la variable y muestra el mapa completo del abecedario
+     * @param texto mensaje proveniente del usuario (Que debería decir: "deletreo")
+     * @return True si se interactúo con el comando, false sino no se interactúo con el comando
+     */
+    public boolean desactivarDeletreo(String texto){
+        if(texto.toLowerCase().contains("deletreo")){
+            if(deletrear){
+                deletrear = false;
+                if(formandoPalabra.equals("")){
+                    tvMostrarCaracteres.setText("");
+                    hablando("Deletreo desactivado", 1000, true);
+                }else{
+                    palabraParcial = formandoPalabra;
+                    hablando("Deletreo desactivado y frase parcial guardada", 1450, false);
+                    hablando("La frase guardada es: " + palabraParcial, 1000, false);
+                    String palabraMsj = "Frase formada: " + palabraParcial;
+                    tvMostrarCaracteres.setText(palabraMsj);
+                    hablando("Por favor. continúa con el resto de la frase", 2000, true);
+                }
+                formandoPalabra = "";
+            }else{
+                deletrear = true;
+                ttsManager.addQueue("Deletreo activado");
+                tvMostrarCaracteres.setText(strAbecedario);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -687,33 +711,34 @@ public class MainActivity extends AppCompatActivity {
             while (ciclo && i < nuevosDatos.length) {
                 //Si el campo en donde van los datos está vacío
                 if (i % 2 != 0 && nuevosDatos[i].equals("")) {
-                    if(!deletrear){
-                        nuevosDatos[i] = palabraParcial + texto;
-                        palabraParcial = "";
-                    }
-                    c.setDatosInsertarBaseDatos(nuevosDatos);
-                    ciclo = false;
-                    if (i < nuevosDatos.length - 1) {
-                        if(deletrear){
-                            nuevosDatos[i] = comandoDeletrear(texto);
-                            i--;
-                        }
 
-                        if(!deletrear){
-                            i++;
-                            if(formandoPalabra.equals("")){
-                                hablando(c.getDatosInsertarBaseDatos()[i], 2000, true);
-                            }else{
-                                hablando(c.getDatosInsertarBaseDatos()[i + 1], 2000, true);
+                    if(deletrear){
+                        c.setDatosInsertarBaseDatos(nuevosDatos);
+                        ciclo = false;
+
+                        if (i < nuevosDatos.length - 1 || c.getDatosInsertarBaseDatos()[i].equals("")) {
+                            nuevosDatos[i] = comandoDeletrear(texto);
+                            i = (deletrear) ? (i - 1) : i;
+
+                            if(!deletrear){
+                                try{
+                                    hablando(c.getDatosInsertarBaseDatos()[i + 1], 2000, true);
+                                }catch (Exception ignored){}
+                                deletrear = false;
+                                formandoPalabra = "";
                             }
                         }
+                    }else{
+                        nuevosDatos[i] = palabraParcial + texto;
+                        palabraParcial = "";
+                        c.setDatosInsertarBaseDatos(nuevosDatos);
+                        ciclo = false;
 
-                        if(!(formandoPalabra.equals("")) && (!nuevosDatos[i + 1].equals(""))){
-                            deletrear = true;
-                            formandoPalabra = "";
+                        if (i < nuevosDatos.length - 1) {
+                            hablando(c.getDatosInsertarBaseDatos()[i+1], 2000, true);
                         }
-
                     }
+
                     if (i == nuevosDatos.length - 1) {
                         ciclo = true;
                     }
@@ -753,7 +778,7 @@ public class MainActivity extends AppCompatActivity {
      * @return true si se usó el metodo, false si no
      */
     public boolean buscarComandoEjecutar(String texto){
-        if (isGreeting) { //if (isGreeting && !algunaBaseDatosProgreso) { ASI ESTABA ESTA LINEA POR SI ALGO SALE MAL
+        if (isGreeting) {
             comandosParaEjecutar(texto);
             return true;
         }
