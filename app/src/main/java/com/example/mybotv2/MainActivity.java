@@ -534,40 +534,44 @@ public class MainActivity extends AppCompatActivity {
      * @param texto El saludo que se reconocio por voz
      */
     public boolean saludoDespedida(String texto) {
-        //Se recorre la lista de los saludos
-        for (String saludo : saludos) {
-            //Se mira si la palabra está en la lista de los saludos o no
-            if (texto.contains(saludo)) {
+        if(algunaBaseDatosProgreso){
+            return false;
+        }else {
+            //Se recorre la lista de los saludos
+            for (String saludo : saludos) {
+                //Se mira si la palabra está en la lista de los saludos o no
+                if (texto.contains(saludo)) {
                 /*Se elige una contestación al azar y se devuelve al usuario por voz y la variable
                 saludo se pone en true para poder continuar con la ejecución, ya que si no saluda
                 no puede hacer uso de las demás funciones */
-                int random = rand.nextInt(saludosBot.size());
+                    int random = rand.nextInt(saludosBot.size());
 
-                String texto2Return = saludosBot.get(random);
-                respuesta.setText(texto2Return);
-                isGreeting = true;
-                hablando(texto2Return, 1500, true);
-                return false;
+                    String texto2Return = saludosBot.get(random);
+                    respuesta.setText(texto2Return);
+                    isGreeting = true;
+                    hablando(texto2Return, 1500, true);
+                    return false;
+                }
             }
-        }
 
-        //Se recorre la lista de las despedidas
-        for (String despedida : despedidas) {
-            //Se mira si la palabra está en la lista de las despedidas o no
-            if (despedida.equalsIgnoreCase(texto)) {
-                //Se responde por voz y mediante una tostada y se cierra la ejecución de la app
-                Toast.makeText(getApplicationContext(), "Cuídate", Toast.LENGTH_LONG).show();
-                ttsManager.initQueue("Cuídate");
-                isGoodbyes = true;
-                new Hilo1().start();
-                return false;
+            //Se recorre la lista de las despedidas
+            for (String despedida : despedidas) {
+                //Se mira si la palabra está en la lista de las despedidas o no
+                if (despedida.equalsIgnoreCase(texto)) {
+                    //Se responde por voz y mediante una tostada y se cierra la ejecución de la app
+                    Toast.makeText(getApplicationContext(), "Cuídate", Toast.LENGTH_LONG).show();
+                    ttsManager.initQueue("Cuídate");
+                    isGoodbyes = true;
+                    new Hilo1().start();
+                    return false;
+                }
             }
-        }
 
-        //Se mira si se saludo o se despedio para dar un mensaje al usuario insitandolo a saludar
-        if (!isGreeting && !isGoodbyes)
-            ttsManager.initQueue("Ten un poco de modales. por favor, salúdame");
-        return true;
+            //Se mira si se saludo o se despedio para dar un mensaje al usuario insitandolo a saludar
+            if (!isGreeting && !isGoodbyes)
+                ttsManager.initQueue("Ten un poco de modales. por favor, salúdame");
+            return true;
+        }
     }
 
     /**
@@ -891,7 +895,7 @@ public class MainActivity extends AppCompatActivity {
                     textoRepetido = texto;
                 } else {
                     String m = "Aún no se hacer eso, pero lo guardaré en la base de datos para que " +
-                            "sea posible pronto";
+                            "me sea posible pronto";
                     ttsManager.addQueue(m);
 
                     String[] nuevosDatos = comando.getDatosInsertarBaseDatos();
@@ -1186,7 +1190,6 @@ public class MainActivity extends AppCompatActivity {
             Map<String, String> datos = new HashMap<>();
             datos.put("phrase", c.getDatosInsertarBaseDatos()[1]);
             datos.put("author", c.getDatosInsertarBaseDatos()[3]);
-            recordGeneral(datos, c);
         }
     }
 
