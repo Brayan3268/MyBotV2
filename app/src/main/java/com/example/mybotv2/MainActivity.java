@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                 "Si usas la palabra comprar podrás guardar algo que tengas pendiente por comprar",
                 new String[]{"Nombre", "", "Categoría", "", "Costo estimado", ""},
                 new String[]{Constants.URL_THINGS_TO_BUY_INSERT, Constants.URL_THINGS_TO_BUY_SELECT},
-                new String[]{"namettb", "", "category", "", "estimatedcost", ""},
+                new String[]{"namethingstobuy", "", "category", "", "estimatedcost", ""},
                 "Cosas por comprar"));
 
         listaComandos.add(new Comandos(15,
@@ -260,6 +260,15 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Constants.URL_CURIOS_DATA_INSERT, Constants.URL_CURIOS_DATA_SELECT},
                 new String[]{"curiousdata", ""},
                 "datos curiosos"
+        ));
+
+        listaComandos.add(new Comandos(20,
+                new String[]{"chiste", "chistes"},
+                "Si quieres que te cuente un chiste solo dí 'cuentame un chiste'",
+                new String[]{"chiste", ""},
+                new String[]{Constants.URL_SHORTJOKE_INSERT, Constants.URL_SHORTJOKE_SELECT},
+                new String[]{"shortjoke", ""},
+                "chistes"
         ));
 
         //proyectos actuales, cosas por hacer
@@ -534,9 +543,7 @@ public class MainActivity extends AppCompatActivity {
      * @param texto El saludo que se reconocio por voz
      */
     public boolean saludoDespedida(String texto) {
-        if(algunaBaseDatosProgreso){
-            return false;
-        }else {
+        if (!algunaBaseDatosProgreso) {
             //Se recorre la lista de los saludos
             for (String saludo : saludos) {
                 //Se mira si la palabra está en la lista de los saludos o no
@@ -568,10 +575,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //Se mira si se saludo o se despedio para dar un mensaje al usuario insitandolo a saludar
-            if (!isGreeting && !isGoodbyes)
+            if (!isGreeting && !isGoodbyes){
                 ttsManager.initQueue("Ten un poco de modales. por favor, salúdame");
-            return true;
+                return false;
+            }
         }
+        return true;
     }
 
     /**
@@ -878,6 +887,9 @@ public class MainActivity extends AppCompatActivity {
             case 19:
                 comandoDatosCuriosos(comando);
                 break;
+            case 20:
+                comandoChistesCortos(comando);
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -890,7 +902,7 @@ public class MainActivity extends AppCompatActivity {
                     contador = 0;
                 }
                 if (!isGoodbyes && contador == 0) {
-                    ttsManager.addQueue("Lo siento. No te he entendido. Pero si lo repites, puedo guardarlo en la base de datos");
+                    ttsManager.addQueue("Lo siento. Eso no lo sé hacer aún. Pero si lo repites, puedo guardarlo en la base de datos");
                     contador++;
                     textoRepetido = texto;
                 } else {
@@ -947,7 +959,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("EEEE/dd/MM/yyyy");
 
-        String fecha = "El día de hoy es " + df.format(c.getTime());
+        String fecha = "El día de hoy es:\n" + df.format(c.getTime());
         ttsManager.initQueue(fecha);
         respuesta.setText(fecha);
         puedeAgradecer = true;
@@ -1173,7 +1185,7 @@ public class MainActivity extends AppCompatActivity {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
-            datos.put("namettb", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("namethingstobuy", c.getDatosInsertarBaseDatos()[1]);
             datos.put("category", c.getDatosInsertarBaseDatos()[3]);
             datos.put("estimatedcost", c.getDatosInsertarBaseDatos()[5]);
             recordGeneral(datos, c);
@@ -1190,6 +1202,7 @@ public class MainActivity extends AppCompatActivity {
             Map<String, String> datos = new HashMap<>();
             datos.put("phrase", c.getDatosInsertarBaseDatos()[1]);
             datos.put("author", c.getDatosInsertarBaseDatos()[3]);
+            recordGeneral(datos, c);
         }
     }
 
@@ -1297,6 +1310,19 @@ public class MainActivity extends AppCompatActivity {
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
             datos.put("curiousdata", c.getDatosInsertarBaseDatos()[1]);
+            recordGeneral(datos, c);
+        }
+    }
+
+    /**
+     * Metodo para agregar chistes obtenidos mediante el usuario por voz
+     * @param c Comando de los chistes
+     */
+    private void comandoChistesCortos(Comandos c){
+        solicitarDatosNecesarios(c);
+        if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
+            Map<String, String> datos = new HashMap<>();
+            datos.put("shortJoke", c.getDatosInsertarBaseDatos()[1]);
             recordGeneral(datos, c);
         }
     }

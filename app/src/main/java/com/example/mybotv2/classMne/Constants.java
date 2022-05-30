@@ -28,4 +28,6 @@ public class Constants {
     public final static String URL_PHRASES_SELECT = URL_WEB_SERVICE + "phrase_SELECT.php";
     public final static String URL_CURIOS_DATA_INSERT = URL_WEB_SERVICE + "curious_data_INSERT.php";
     public final static String URL_CURIOS_DATA_SELECT = URL_WEB_SERVICE + "curious_data_SELECT.php";
+    public final static String URL_SHORTJOKE_INSERT = URL_WEB_SERVICE + "shortJoke_INSERT.php";
+    public final static String URL_SHORTJOKE_SELECT = URL_WEB_SERVICE + "shortJoke_SELECT.php";
 }
