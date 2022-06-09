@@ -18,7 +18,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.example.mybotv2.classMne.Comandos;
+import com.example.mybotv2.classMne.Comando;
 import com.example.mybotv2.classMne.Constants;
 import com.example.mybotv2.classMne.TTSManager;
 
@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     int numeroComandos, contador = 0;
     String strSpeech2Text = "", textoRepetido = "", mostrar, formandoPalabra = "",
-        palabraParcial = "";
-    final String strAbecedario;
-    final String[] diasSemana = new String[9];
+        palabraParcial = "", ultimaRespuestaBot = "";
+    String strAbecedario;
+    String[] diasSemana = new String[9];
     boolean isGreeting, isGoodbyes, esperarConfirmacion, puedeAgradecer, leyendo,
             algunaBaseDatosProgreso, buscandoBaseDato, buscandoDato, deletrear = false;
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> despedidas = new ArrayList<>();
     ArrayList<String> agradecimientos = new ArrayList<>();
     ArrayList<String> agradecimientosBot = new ArrayList<>();
-    ArrayList<Comandos> listaComandos = new ArrayList<>();
+    ArrayList<Comando> listaComandos = new ArrayList<>();
 
     Map<String, String> numeros = new HashMap<>();
     Map<String, String> abecedario = new HashMap<>();
@@ -63,219 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     TTSManager ttsManager = null;
 
-    {
-        /* Inicializar la lista para deletrear y la conversion de letras a numeros*/
-        abecedario.put("1","a"); abecedario.put("2","b"); abecedario.put("3","c");
-        abecedario.put("4","d"); abecedario.put("5","e"); abecedario.put("6","f");
-        abecedario.put("7","g"); abecedario.put("8","h"); abecedario.put("9","i");
-        abecedario.put("10","j"); abecedario.put("11","k"); abecedario.put("12","l");
-        abecedario.put("13","m"); abecedario.put("14","n"); abecedario.put("15","ñ");
-        abecedario.put("16","o"); abecedario.put("17","p"); abecedario.put("18","q");
-        abecedario.put("19","r"); abecedario.put("20","s"); abecedario.put("21","t");
-        abecedario.put("22","u"); abecedario.put("23","v"); abecedario.put("24","w");
-        abecedario.put("25","x"); abecedario.put("26","y"); abecedario.put("27","z");
-        abecedario.put("28", " "); abecedario.put("29", ", "); abecedario.put("30", ".");
-        abecedario.put("31", ": "); abecedario.put("32", "-"); abecedario.put("33", " - ");
-        abecedario.put("34", "¿"); abecedario.put("35", "?"); abecedario.put("36", "á");
-        abecedario.put("37", "é"); abecedario.put("38", "í"); abecedario.put("39", "ó");
-        abecedario.put("40", "ú"); abecedario.put("41", "ü"); abecedario.put("42", "¡");
-        abecedario.put("43", "!");
-
-        mostrar = ordenarCaracteres(abecedario);
-        mostrar += "Cuando termines de deletrear di 'listo'.";
-        strAbecedario = mostrar;
-
-        numeros.put("cero", "0"); numeros.put("uno", "1"); numeros.put("dos", "2");
-        numeros.put("tres", "3"); numeros.put("cuatro", "4"); numeros.put("cinco", "5");
-        numeros.put("seis", "6"); numeros.put("siete", "7"); numeros.put("ocho", "8");
-        numeros.put("nueve", "9");
-
-        /* Los mensajes para que el bot sepa que es un saludo y que es una despedida y que responder */
-        saludos.add("hola"); saludos.add("buenos días"); saludos.add("buenas tardes");
-        saludos.add("buenas noches"); saludos.add("buenas"); //saludos.add("buenos");
-
-        saludosBot.add("Hola. ¿Que quieres hacer hoy?");
-        saludosBot.add("Espero que estés teniendo un lindo día. ¿Que te gustaria hacer?");
-        saludosBot.add("¡Que genial tenerte aquí!. ¿Que hacemos ahora?");
-        saludosBot.add("Hola. ¡¿Con qué empezamos?!");
-
-        despedidas.add("hasta luego"); despedidas.add("chao"); //despedidas.add("la buena");
-        despedidas.add("todo bien"); despedidas.add("adiós"); despedidas.add("chau");
-        despedidas.add("nos vemos"); despedidas.add("nos pi"); despedidas.add("hasta pronto");
-
-        diasSemana[0] = "lunes"; diasSemana[1] = "martes"; diasSemana[2] = "miércoles";
-        diasSemana[3] = "miercoles"; diasSemana[4] = "jueves"; diasSemana[5] = "viernes";
-        diasSemana[6] = "sábado"; diasSemana[7] = "sabado"; diasSemana[8] = "domingo";
-
-        agradecimientos.add("muchas gracias"); agradecimientos.add("gracias");
-        agradecimientos.add("mi dios le pague"); agradecimientos.add("la buena");
-
-        agradecimientosBot.add("¡Con mucho gusto!");
-        agradecimientosBot.add("Para servirte");
-        agradecimientosBot.add("me alegra haberte ayudado");
-        agradecimientosBot.add("fue un placer");
-        agradecimientosBot.add("espero seguir siendo de ayuda");
-        agradecimientosBot.add("no hay porqué");
-        agradecimientosBot.add("seguiré aquí por si me necesitas");
-        agradecimientosBot.add("¡fue un trabajo en equipo!");
-        agradecimientosBot.add("¡Estoy para ayudarte!");
-
-        /* La lista de los comandos que reconoce la aplicación */
-        listaComandos.add(new Comandos(1,
-                new String[]{"fecha", "día"},
-                "Si usas la palabra fecha ó día, te diré la fecha del día de hoy"));
-
-        listaComandos.add(new Comandos(2,
-                new String[]{"hora"},
-                "Si usas la palabra hora, te diré la hora actual"));
-
-        listaComandos.add(new Comandos(3, new String[]{"persona", "personas"},
-                "Si usas la palabra personas, podrás agregar a alguien a la base de datos " +
-                        "de las personas",
-                new String[]{"Nombre", "", "Razón", "", "¿Ayudar?", ""},
-                new String[]{Constants.URL_PEOPLE_FOR_KNOW_HELP_INSERT, Constants.URL_PEOPLE_FOR_KNOW_HELP_SELECT},
-                new String[]{"nameperson", "", "reason", "", "help", ""},
-                "Personas"));
-
-        listaComandos.add(new Comandos(4,
-                new String[]{"idea", "ideas"},
-                "Si usas la palabra ideas, podrás agregar una nueva idea a la base de datos " +
-                        "de las ideas de programación",
-                new String[]{"Idea", "", "colaboradores", ""},
-                new String[]{Constants.URL_IDEAS_FOR_APPS_INSERT, Constants.URL_IDEAS_FOR_APPS_SELECT},
-                new String[]{"ideadescription", "", "collaborator", ""},
-                "Ideas"));
-
-        listaComandos.add(new Comandos(5,
-                new String[]{"juego", "juegos", "rescatado", "terminado", "finalizado"},
-                "Si usas la palabra juegos, rescatado ó terminado podras guardar en la " +
-                        "base de datos de los juegos rescatados un nuevo juego que hayas completado",
-                new String[]{"Nombre", ""},
-                new String[]{Constants.URL_GAME_FINISHED_INSERT, Constants.URL_GAME_FINISHED_READ},
-                new String[]{"namegame", ""},
-                "Juegos rescatados"));
-
-        listaComandos.add(new Comandos(6,
-                new String[]{"película", "películas", "serie", "series", "pelicula", "peliculas"},
-                "Si usas las palabras película ó serie, podrás agregar una película o una serie " +
-                        "a la base de datos",
-                new String[]{"Nombre", "", "Tipo", ""},
-                new String[]{Constants.URL_MOVIES_OR_SERIES, Constants.URL_MOVIES_OR_SERIES_SELECT},
-                new String[]{"namemovieorserie", "", "typems", ""},
-                "Películas o series"));
-
-        listaComandos.add(new Comandos(7,
-                new String[]{"puedes", "sabes", "comando", "comandos", "sabe"},
-                "Si usas algunas de las palabras puedes, sabes ó comandos, te diré los " +
-                        "comandos sobre todo lo que puedo hacer actualmente"));
-
-        listaComandos.add(new Comandos(8,
-                new String[]{"leer", "trae", "consulta", "lee", "léeme", "leeme"},
-                "Si usas alguna de las palabras, leer, trae ó consulta, te dire la " +
-                        "información que haya en la base de datos de tu elección"));
-
-        listaComandos.add(new Comandos(9,
-                new String[]{"tareas", "tengo", "hay", "tarea", "pendientes", "pendiente"},
-                "Si usas algunas de las palabras tareas, tengo, pendientes ó hay, podrás " +
-                        "añadir una nueva cosa que tengas por hacer",
-                new String[]{"Título", "", "Descripción", "", "¿Cuántos días tienes?", "", "Estado", ""},
-                new String[]{Constants.URL_THINGS_TO_DO_INSERT, Constants.URL_THINGS_TO_DO_SELECT},
-                new String[]{"title", "", "description", "", "datatodo", "", "status", ""},
-                "Cosas pendientes"));
-
-        listaComandos.add(new Comandos(10,
-                new String[]{"sugerir", "inexistente", "inexistentes"},
-                "Si usas alguna de las palabras sugerir ó inexistente podrás añadir un comando " +
-                        "que te gustaría que pudiera hacer",
-                new String[]{"¿Como quieres que se llame el comando?", "", "Descripción para este comando", "", "¿Cual es tú nombre?", ""},
-                new String[]{Constants.URL_COMAND_NON_EXIST_INSERT, Constants.URL_COMAND_NON_EXIST_SELECT},
-                new String[]{"intentcomand", "", "description", "", "whosuggestion", ""},
-                "Comandos inexistentes"));
-
-        listaComandos.add(new Comandos(11,
-                new String[]{"documento", "documentos", "papeles", "archivos", "archivo"},
-                "Si usas la palabra archivos, documentos o papeles, podrás añadir nuevos archivos a " +
-                        "la base de datos junto con su identificador",
-                new String[]{"Descripción", "", "Identificador", ""},
-                new String[]{Constants.URL_FILE_INSERT, Constants.URL_FILE_SELECT},
-                new String[]{"description", "", "idforfiles", ""},
-                "Documentos"));
-
-        listaComandos.add(new Comandos(12,
-                new String[]{"libro", "libros"},
-                "Si usas la palabra libro, podras añadir un libro leido a la base de datos",
-                new String[]{"Nombre", "", "Autor", "", "Valoración", ""},
-                new String[]{Constants.URL_BOOKS_INSERT, Constants.URL_BOOKS_SELECT},
-                new String[]{"bookname", "", "author", "", "assessment", ""},
-                "Libros"));
-
-        listaComandos.add(new Comandos(13,
-                new String[]{"cumpleaños"},
-                "Si usas la palabra cumpleaños podras agregar el cumpleaños de quien tú quieras",
-                new String[]{"Nombre", "", "Fecha", ""},
-                new String[]{Constants.URL_BIRTHDAY_INSERT, Constants.URL_BIRTHDAY_SELECT},
-                new String[]{"namebirthday", "", "date", ""},
-                "Cumpleaños"));
-
-        listaComandos.add(new Comandos(14,
-                new String[]{"comprar", "por comprar", "para comprar"},
-                "Si usas la palabra comprar podrás guardar algo que tengas pendiente por comprar",
-                new String[]{"Nombre", "", "Categoría", "", "Costo estimado", ""},
-                new String[]{Constants.URL_THINGS_TO_BUY_INSERT, Constants.URL_THINGS_TO_BUY_SELECT},
-                new String[]{"namethingstobuy", "", "category", "", "estimatedcost", ""},
-                "Cosas por comprar"));
-
-        listaComandos.add(new Comandos(15,
-                new String[]{"frases", "frase"},
-                "Si usas la palabra frases podrás guardar una nueva frase que te haya gustado",
-                new String[]{"Frase", "", "Autor", ""},
-                new String[]{Constants.URL_PHRASES_INSERT, Constants.URL_PHRASES_SELECT},
-                new String[]{"phrase", "", "author", ""},
-                "Frases"));
-
-        listaComandos.add(new Comandos(16,
-                new String[]{"bases", "bases de datos"},
-                "Si dices las palabras bases de datos podras saber todas las bases de datos " +
-                        "que puedo consultar en este momento"));
-
-        listaComandos.add(new Comandos(17,
-                new String[]{"busca", "buscar"},
-                "Si dices la palabra buscar podrás consultar una base de datos de tu " +
-                        "elección y buscar un dato en específico"
-        ));
-
-        listaComandos.add(new Comandos(18,
-                new String[]{"deletreo", "deletrear", "activar deletreo", "desactivar deletreo",
-                "deletrea"},
-                "Si dices activar deletreo, comenzará el protocolo que te permite formar " +
-                        "oraciones deletreando y diciendo desactivar deletreo, apagarás el protocolo y podrás " +
-                        "hablarme normal"
-        ));
-        
-        listaComandos.add(new Comandos(19, 
-                new String[]{"curioso", "curios", "dato curioso"},
-                "Si dices la frase dato curioso puedes agregar un dato que te parezca " +
-                        "interesante a la base de datos",
-                new String[]{"dato", ""},
-                new String[]{Constants.URL_CURIOS_DATA_INSERT, Constants.URL_CURIOS_DATA_SELECT},
-                new String[]{"curiousdata", ""},
-                "datos curiosos"
-        ));
-
-        listaComandos.add(new Comandos(20,
-                new String[]{"chiste", "chistes"},
-                "Si quieres que te cuente un chiste solo dí 'cuentame un chiste'",
-                new String[]{"chiste", ""},
-                new String[]{Constants.URL_SHORTJOKE_INSERT, Constants.URL_SHORTJOKE_SELECT},
-                new String[]{"shortjoke", ""},
-                "chistes"
-        ));
-
-        //proyectos actuales, cosas por hacer
-        //Guardar actividades para realizar con fecha, tipo calendario, dato random
-        numeroComandos = listaComandos.size();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,6 +70,20 @@ public class MainActivity extends AppCompatActivity {
         AndroidNetworking.initialize(getApplicationContext());
 
         //Se inicializan los componentes
+        Constants.inicializar();
+        agradecimientos = Constants.agradecimientos;
+        agradecimientosBot = Constants.agradecimientosBot;
+        despedidas = Constants.despedidas;
+        saludosBot = Constants.saludosBot;
+        saludos = Constants.saludos;
+        numeros = Constants.numeros;
+        diasSemana = Constants.diasSemana;
+        abecedario = Constants.abecedario;
+        mostrar = Constants.mostrar;
+        strAbecedario = Constants.strAbecedario;
+        listaComandos = Constants.listaComandos;
+        numeroComandos = listaComandos.size();
+
         grabar = findViewById(R.id.tvGrabarVoz);
         respuesta = findViewById(R.id.tvGrabarRes);
         img_btn_hablar = findViewById(R.id.img_btn_hablar);
@@ -298,35 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void diferentesPalabrasClaves(){
 
-    }
-
-    private String ordenarCaracteres(Map<String, String> abc){
-        StringBuilder newAbc = new StringBuilder();
-        String i = "1";
-        int i2 = 1, max = abc.size();
-
-        while(i2 <= max){
-            for (Map.Entry<String, String> entry : abc.entrySet()) {
-                if(i.equals(entry.getKey())){
-                    if(entry.getValue().equals(" ")){
-                        newAbc.append(entry.getKey()).append(" --> ").append("(Espacio)").append("\n");
-                    }else{
-                        if(entry.getValue().equals(" - ")){
-                            newAbc.append(entry.getKey()).append(" --> ").append("( - )").append("\n");
-                        }else{
-                            if(entry.getValue().equals("-")){
-                                newAbc.append(entry.getKey()).append(" --> ").append("(-)").append("\n");
-                            }else{
-                                newAbc.append(entry.getKey()).append(" --> ").append(entry.getValue()).append("\n");
-                            }
-                        }
-                    }
-                    i2++;
-                    i = i2 + "";
-                }
-            }
-        }
-        return newAbc.toString();
     }
 
     /**
@@ -472,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 formandoPalabra = "";
             }else{
                 deletrear = true;
-                ttsManager.addQueue("Deletreo activado");
+                hablando("Deletreo activado", 0, false);
                 tvMostrarCaracteres.setText(strAbecedario);
             }
             return true;
@@ -488,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public boolean buscarDatoEspecifico(String texto){
         if(buscandoBaseDato){
-            for (Comandos c : listaComandos) {
+            for (Comando c : listaComandos) {
                 for (String s : c.getComando()) {
                     if (texto.toLowerCase().contains(s.toLowerCase())) {
                         c.setEnProgreso(true);
@@ -497,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                             buscandoDato = true;
                             buscandoBaseDato = false;
                         }else{
-                            ttsManager.addQueue("Esa base de datos no existe");
+                            hablando("Esa base de datos no existe", 0, false);
                         }
                         return true;
                     }
@@ -522,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String texto2Return = agradecimientosBot.get(random);
                 respuesta.setText(texto2Return);
-                ttsManager.initQueue(texto2Return);
+                hablando(texto2Return, 0, false);
                 puedeAgradecer = false;
                 return true;
             }
@@ -531,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
             if(texto.contains(agradecimiento) && !puedeAgradecer){
                 String res = "¡No hay nada que agradecer!";
                 respuesta.setText(res);
-                ttsManager.initQueue(res);
+                hablando(res, 0, false);
                 return true;
             }
         }
@@ -567,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                 if (despedida.equalsIgnoreCase(texto)) {
                     //Se responde por voz y mediante una tostada y se cierra la ejecución de la app
                     Toast.makeText(getApplicationContext(), "Cuídate", Toast.LENGTH_LONG).show();
-                    ttsManager.initQueue("Cuídate");
+                    hablando("Cuídate", 0, false);
                     isGoodbyes = true;
                     new Hilo1().start();
                     return false;
@@ -576,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Se mira si se saludo o se despedio para dar un mensaje al usuario insitandolo a saludar
             if (!isGreeting && !isGoodbyes){
-                ttsManager.initQueue("Ten un poco de modales. por favor, salúdame");
+                hablando("Ten un poco de modales. por favor, salúdame", 1000, true);
                 return false;
             }
         }
@@ -598,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         } else {
             if (texto.contains("cance") || strSpeech2Text.toLowerCase().contains("olv")) {
-                ttsManager.addQueue("No hay procesos para cancelar");
+                hablando("No hay procesos para cancelar", 0, false);
                 return true;
             }
         }
@@ -629,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
         if (esperarConfirmacion) {
             if (texto.toLowerCase().contains("s") || texto.toLowerCase().contains("co")) {
                 try {
-                    Comandos c = mirarBaseDatosEnProgreso();
+                    Comando c = mirarBaseDatosEnProgreso();
                     c.setConfirmacion(true);
                     pedirConfirmacion(c);
                     c.setConfirmacion(false);
@@ -667,8 +439,8 @@ public class MainActivity extends AppCompatActivity {
      * @param texto Mensaje del usuario
      */
     public void resetearDatos(String texto) {
-        ttsManager.addQueue(texto);
-        Comandos c = mirarBaseDatosEnProgreso();
+        hablando(texto, 0, false);
+        Comando c = mirarBaseDatosEnProgreso();
         if (c != null) {
             c.setEnProgreso(false);
             c.setConfirmacion(false);
@@ -703,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
      * @param texto mensaje dicho por voz proveniente del usuario
      */
     public void agregarDatosComando(String texto) {
-        Comandos c = mirarBaseDatosEnProgreso();
+        Comando c = mirarBaseDatosEnProgreso();
         boolean ciclo = true;
         int i = 0;
         try {
@@ -774,15 +546,15 @@ public class MainActivity extends AppCompatActivity {
      * @param texto 'Sugerir' ya que así se invoca el comando
      * @return el objeto del comando 'sugerir comandos'
      */
-    public Comandos obtenerComandoPeticion(String texto) {
-        for (Comandos c : listaComandos) {
+    public Comando obtenerComandoPeticion(String texto) {
+        for (Comando c : listaComandos) {
             for (String s : c.getComando()) {
                 if (texto.toLowerCase().contains(s.toLowerCase())) {
                     return (c);
                 }
             }
         }
-        return new Comandos();
+        return new Comando();
     }
 
     /**
@@ -807,7 +579,7 @@ public class MainActivity extends AppCompatActivity {
      * @param texto Lo que se reconocio por voz del usuario
      */
     public void comandosParaEjecutar(String texto) {
-        for (Comandos c : listaComandos) {
+        for (Comando c : listaComandos) {
             for (String s : c.getComando()) {
                 if (texto.toLowerCase().contains(s.toLowerCase())) {
                     llamadoComando(c.getNumeroComando(), c, texto);
@@ -828,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
      * @param comando             El objeto del comando seleccionado
      * @param texto               El texto reconocido por voz
      */
-    public void llamadoComando(int comandoParaEjecutar, Comandos comando, String texto) {
+    public void llamadoComando(int comandoParaEjecutar, Comando comando, String texto) {
         switch (comandoParaEjecutar) {
             case 1:
                 comandoFecha();
@@ -890,6 +662,9 @@ public class MainActivity extends AppCompatActivity {
             case 20:
                 comandoChistesCortos(comando);
                 break;
+            case 21:
+                comandoRepetir();
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -902,13 +677,12 @@ public class MainActivity extends AppCompatActivity {
                     contador = 0;
                 }
                 if (!isGoodbyes && contador == 0) {
-                    ttsManager.addQueue("Lo siento. Eso no lo sé hacer aún. Pero si lo repites, puedo guardarlo en la base de datos");
+                    hablando("Lo siento. Eso no lo sé hacer aún. Pero si lo repites, puedo guardarlo en la base de datos", 0, false);
                     contador++;
                     textoRepetido = texto;
                 } else {
-                    String m = "Aún no se hacer eso, pero lo guardaré en la base de datos para que " +
-                            "me sea posible pronto";
-                    ttsManager.addQueue(m);
+                    hablando("Aún no se hacer eso, pero lo guardaré en la base de datos para que " +
+                            "me sea posible pronto", 500, false);
 
                     String[] nuevosDatos = comando.getDatosInsertarBaseDatos();
                     nuevosDatos[0] = "El nombre que intentaste fue:";
@@ -926,8 +700,8 @@ public class MainActivity extends AppCompatActivity {
      *
      * @return Un comando
      */
-    public Comandos mirarBaseDatosEnProgreso() {
-        for (Comandos c : listaComandos) {
+    public Comando mirarBaseDatosEnProgreso() {
+        for (Comando c : listaComandos) {
             if (c.getEnProgreso())
                 return c;
         }
@@ -939,7 +713,7 @@ public class MainActivity extends AppCompatActivity {
      * la entrada al metodo 'agregarDatosComando'
      * @param c Objeto Comando del que se van a tomar los parametros para solicitar los datos
      */
-    public void solicitarDatosNecesarios(Comandos c) {
+    public void solicitarDatosNecesarios(Comando c) {
         for (int i = 0; i < c.getDatosInsertarBaseDatos().length; i++) {
             if (i % 2 != 0 && c.getDatosInsertarBaseDatos()[i].equals("")) {
                 algunaBaseDatosProgreso = true;
@@ -960,7 +734,7 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("EEEE/dd/MM/yyyy");
 
         String fecha = "El día de hoy es:\n" + df.format(c.getTime());
-        ttsManager.initQueue(fecha);
+        hablando(fecha, 0, false);
         respuesta.setText(fecha);
         puedeAgradecer = true;
     }
@@ -975,18 +749,24 @@ public class MainActivity extends AppCompatActivity {
         int hora = calendario.get(Calendar.HOUR_OF_DAY);
         int minuto = calendario.get(Calendar.MINUTE);
         String horaCompleta = "";
-        if (hora <= 12) {
-            horaCompleta = "Son las " + hora + " y " + minuto + " de la mañana";
+        if (hora < 12) {
+            horaCompleta = hora != 1 ? "Son las " + hora + " y " + minuto + " de la mañana" : "Son la una y " + minuto + " de la mañana";
         } else {
-            if (hora <= 18) {
-                horaCompleta = "Son las " + (hora - 12) + " y " + minuto + " de la tarde";
-            } else {
-                if (hora > 19) {
-                    horaCompleta = "Son las " + (hora - 12) + " y " + minuto + " de la noche";
+            if(hora == 12){
+                horaCompleta = "Son las " + hora + " y " + minuto + " de la tarde";
+            }else{
+                if (hora <= 18) {
+                    horaCompleta = hora != 13 ? "Son las " + (hora - 12) + " y " + minuto + " de la tarde" : "Son la una y " + minuto + " de la tarde";
+                } else {
+                    if(hora < 24){
+                        horaCompleta = "Son las " + (hora - 12) + " y " + minuto + " de la noche";
+                    }else{
+                        horaCompleta = "Son las " + (hora - 12) + " y " + minuto + " de la madrugada";
+                    }
                 }
             }
         }
-        ttsManager.initQueue(horaCompleta);
+        hablando(horaCompleta, 0, false);
         respuesta.setText(horaCompleta);
         puedeAgradecer = true;
     }
@@ -995,7 +775,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva persona
      * @param c El comando personas
      */
-    private void comandoPersonas(Comandos c) {
+    private void comandoPersonas(Comando c) {
         solicitarDatosNecesarios(c);
         if ((c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0) &&
                 c.getEnProgreso()) {
@@ -1012,7 +792,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva idea de programación
      * @param c El comando Ideas
      */
-    private void comandoIdeas(Comandos c) {
+    private void comandoIdeas(Comando c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1027,7 +807,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos un nuevo juego rescatado
      * @param c El comando juegos rescatados
      */
-    private void comandoJuegos(Comandos c) {
+    private void comandoJuegos(Comando c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1040,7 +820,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva película o serie
      * @param c El comando películas o series
      */
-    private void comandoPeliculasSeries(Comandos c) {
+    private void comandoPeliculasSeries(Comando c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1055,7 +835,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void comandoComandos() {
         StringBuilder comandos = new StringBuilder();
-        for (Comandos c : listaComandos) {
+        for (Comando c : listaComandos) {
             comandos.append(c.getNumeroComando()).append(")");
             for (String s : c.getComando()) {
                 if (c.getNumeroComando() == numeroComandos && s.equalsIgnoreCase(c.getComando()[c.getComando().length - 1])) {
@@ -1068,14 +848,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            if (ttsManager.getIsLoaded()) {
-                ttsManager.addQueue(c.getDescripcion());
-            } else {
-                ttsManager.initQueue(c.getDescripcion());
-            }
+            hablando(c.getDescripcion(), 0, false);
         }
         respuesta.setText(comandos.toString());
-        ttsManager.addQueue("Y bien. ¿Que quieres hacer primero?");
+        hablando("Y bien. ¿Que quieres hacer primero?", 0, false);
         puedeAgradecer = true;
     }
 
@@ -1086,7 +862,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void comandoLeer(String texto) {
         if (leyendo) {
-            for (Comandos c : listaComandos) {
+            for (Comando c : listaComandos) {
                 for (String s : c.getComando()) {
                     if (texto.toLowerCase().contains(s.toLowerCase())) {
                         c.setEnProgreso(true);
@@ -1105,7 +881,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva cosa por hacer
      * @param c El comando cosas TODO
      */
-    private void comandoCosasToDo(Comandos c) {
+    private void comandoCosasToDo(Comando c) {
         //String dia = tomarDiaSeleccionado(texto);
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
@@ -1123,7 +899,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos un nuevo comando sugerido
      * @param c El comando comandos sugeridos
      */
-    private void comandoSugerirComandos(Comandos c) {
+    private void comandoSugerirComandos(Comando c) {
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1138,7 +914,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos un nuevo archivo o papeles
      * @param c El comando archivos - papeles - documentos
      */
-    private void comandoArchivos(Comandos c){
+    private void comandoArchivos(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1152,7 +928,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos un nuevo libro
      * @param c El comando libros
      */
-    private void comandoLibros(Comandos c){
+    private void comandoLibros(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1167,7 +943,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos un nuevo cumpleaños
      * @param c El comando cumpleaños
      */
-    private void comandoBirthDay(Comandos c){
+    private void comandoBirthDay(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1181,7 +957,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva cosa por comprar
      * @param c El comando de las cosas por comprar
      */
-    private void comandoCosasToBuy(Comandos c){
+    private void comandoCosasToBuy(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1196,7 +972,7 @@ public class MainActivity extends AppCompatActivity {
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva frase
      * @param c El comando frases
      */
-    private void comandoFrases(Comandos c){
+    private void comandoFrases(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1214,21 +990,20 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> basesDatos = new ArrayList<>();
         StringBuilder res = new StringBuilder();
 
-        for (Comandos c : listaComandos){
+        for (Comando c : listaComandos){
             if(c.getNombreBaseDatos() != null){
                 nBasesDatos++;
                 basesDatos.add(c.getNombreBaseDatos());
             }
         }
 
-        ttsManager.addQueue("Por ahora existen " + nBasesDatos + " bases de datos a las que puedo acceder");
-        ttsManager.addQueue("Estas son: ");
+        hablando("Por ahora existen " + nBasesDatos + " bases de datos a las que puedo acceder." + "Estas son: ", 0, false);
 
         for (int i = 0; i < basesDatos.size(); i++){
             if(i == basesDatos.size() - 1) {
-                ttsManager.addQueue("Y " + basesDatos.get(i));
+                hablando("Y " + basesDatos.get(i), 0, false);
             }else{
-                ttsManager.addQueue(basesDatos.get(i));
+                hablando(basesDatos.get(i), 0, false);
             }
             res.append(basesDatos.get(i)).append(". ");
         }
@@ -1260,12 +1035,12 @@ public class MainActivity extends AppCompatActivity {
 
             if(texto.equals("listo")){
                 deletrear = false;
-                ttsManager.addQueue("La palabra formada es " + formandoPalabra);
+                hablando("La palabra formada es " + formandoPalabra, 0, false);
                 return formandoPalabra;
             }
         }else{
             deletrear = true;
-            ttsManager.addQueue("Deletreo activado");
+            hablando("Deletreo activado", 0, false);
             tvMostrarCaracteres.setText(strAbecedario);
         }
         return "";
@@ -1296,7 +1071,7 @@ public class MainActivity extends AppCompatActivity {
             hablando("Agregada la letra " + caracter, 1000, entradaVoz);
         } catch (Exception ignored) {
             if(!(txtNum.equalsIgnoreCase("listo"))){
-                ttsManager.addQueue("Tienes que decir un numero de la lista");
+                hablando("Tienes que decir un número de la lista", 0, false);
             }
         }
     }
@@ -1305,11 +1080,11 @@ public class MainActivity extends AppCompatActivity {
      * Metodo para agregar datos curiosos obtenidos mediante el usuario por voz
      * @param c Comando de los datos curiosos
      */
-    private void comandoDatosCuriosos(Comandos c){
+    private void comandoDatosCuriosos(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
-            datos.put("curiousdata", c.getDatosInsertarBaseDatos()[1]);
+            datos.put("curiousData", c.getDatosInsertarBaseDatos()[1]);
             recordGeneral(datos, c);
         }
     }
@@ -1318,7 +1093,7 @@ public class MainActivity extends AppCompatActivity {
      * Metodo para agregar chistes obtenidos mediante el usuario por voz
      * @param c Comando de los chistes
      */
-    private void comandoChistesCortos(Comandos c){
+    private void comandoChistesCortos(Comando c){
         solicitarDatosNecesarios(c);
         if (c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()) {
             Map<String, String> datos = new HashMap<>();
@@ -1328,19 +1103,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Método que hace que Celeste repita lo último que dijo
+     */
+    private void comandoRepetir(){
+        hablando(ultimaRespuestaBot, 1000, false);
+    }
+
+    /**
      * Es para reproducir un mensaje para el usuario, esperar a que se acabe e iniciar una entrada de voz
      * @param mensaje Mensaje para el usuario
      * @param time Tiempo en segundo de espera para validar si ya acabó de hablar
      * @param iniciar Saber si se inicia o no la entrada de voz
      */
     private void hablando(String mensaje, int time, boolean iniciar){
-        ttsManager.addQueue(mensaje);
-        try {
-            while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
-                Thread.sleep(time);
-            }
-        } catch (Exception ignored) {}
-        if(iniciar){ iniciarEntradaVoz(); }
+        if(ttsManager.getIsLoaded()){
+            ttsManager.addQueue(mensaje);
+        }else{
+            ttsManager.initQueue(mensaje);
+        }
+        ultimaRespuestaBot = mensaje;
+
+        if(time != 0){
+            try {
+                while (ttsManager.getIsSpeaking()) { //noinspection BusyWait
+                    Thread.sleep(time);
+                }
+            } catch (Exception ignored) {}
+            if(iniciar){ iniciarEntradaVoz(); }
+        }
     }
 
 /*
@@ -1362,7 +1152,7 @@ public class MainActivity extends AppCompatActivity {
      * @param datos Mapa de los datos a guardar con sus parametros
      * @param c Objeto para tomar las rutas y parametros de donde se van a guardar los datos
      */
-    private void recordGeneral(Map<String, String> datos, Comandos c) {
+    private void recordGeneral(Map<String, String> datos, Comando c) {
         if (!esperarConfirmacion) {
             try {
                 pedirConfirmacion(c);
@@ -1388,7 +1178,7 @@ public class MainActivity extends AppCompatActivity {
                         String respuesta = response.getString("respuesta");
                         String error = response.getString("error");
                         if (respuesta.equals("-1")) {
-                            ttsManager.addQueue(error);
+                            hablando("Ha ocurrido un error. El error es: " + error, 0, false);
                         }
                         if (respuesta.equals("200")) {
                             Toast.makeText(getApplicationContext(), "Registro insertado con exito", Toast.LENGTH_LONG).show();
@@ -1399,7 +1189,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         //Case sad with the query
                         Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        ttsManager.addQueue("Registro no insertado");
+                        hablando("Registro no insertado en la base de datos", 0, false);
                         resetearDatos("");
                     }
                 }
@@ -1408,7 +1198,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onError(ANError anError) {
                     //Is execute when the query has happened an error
                     Toast.makeText(getApplicationContext(), "Error: " + anError.getErrorDetail(), Toast.LENGTH_LONG).show();
-                    ttsManager.addQueue("Registro no insertado");
+                    hablando("Registro no insertado", 0, false);
                     resetearDatos("");
                 }
             });
@@ -1419,8 +1209,8 @@ public class MainActivity extends AppCompatActivity {
      * Consulta una base de datos y muestra los resultados
      * @param c Comando que se eligio para consultar la base de datos
      */
-    private void readDataBase(Comandos c) {
-        ttsManager.addQueue("Buscando");
+    private void readDataBase(Comando c) {
+        hablando("Buscando", 0, false);
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -1431,7 +1221,7 @@ public class MainActivity extends AppCompatActivity {
                             String res = response.getString("respuesta");
                             if (res.equals("200")) {
                                 JSONArray array = response.getJSONArray("data");
-                                ttsManager.addQueue("Los datos son:");
+                                hablando("Los datos son: ", 0, false);
                                 StringBuilder mostrar = new StringBuilder();
                                 int cont = 0;
 
@@ -1459,16 +1249,16 @@ public class MainActivity extends AppCompatActivity {
                                             leer += datosLeidos[k];
                                             mostrar.append(datosLeidos[k]).append(".\n");
                                         }
-                                        ttsManager.addQueue(leer);
+                                        hablando(leer, 0, false);
                                     }
                                     mostrar.append("\n");
 
                                 }
 
                                 respuesta.setText(mostrar.toString());
-                                ttsManager.addQueue("Listo. ¿Qué más quieres hacer?");
+                                hablando("Listo. ¿Qué más quieres hacer?", 0, false);
                             } else {
-                                ttsManager.addQueue("No hay datos para leer");
+                                hablando("No hay datos para leer", 0, false);
                             }
                             puedeAgradecer = true;
                             leyendo = false;
@@ -1490,8 +1280,8 @@ public class MainActivity extends AppCompatActivity {
      * Consulta una base de datos y muestra los resultados de los datos que coincidan con los proporcionados
      * @param c Comando que se eligio para consultar la base de datos
      */
-    private void readSpecificDataBase(Comandos c) {
-        ttsManager.addQueue("Buscando");
+    private void readSpecificDataBase(Comando c) {
+        hablando("Buscando", 0, false);
         AndroidNetworking.post(c.getRutas()[1])
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -1522,8 +1312,7 @@ public class MainActivity extends AppCompatActivity {
                                     datosLeidos = toLowerCase(datosLeidos);
                                     if(coincidencias(datosLeidos, datosBuscar, 0)){
                                         if(l == 0){
-                                            ttsManager.addQueue("Encontré estos datos que coinciden total o parcialmente con lo que buscas");
-                                            hablando("", 800, false);
+                                            hablando("Encontré estos datos que coinciden total o parcialmente con lo que buscas.", 800, false);
                                             l++;
                                         }
                                         cont++;
@@ -1538,7 +1327,7 @@ public class MainActivity extends AppCompatActivity {
                                                 leer += datosLeidos[k];
                                                 mostrar.append(datosLeidos[k]).append(".\n");
                                             }
-                                            ttsManager.addQueue(leer);
+                                            hablando(leer, 0, false);
                                         }
                                         mostrar.append("\n");
                                     }
@@ -1546,15 +1335,14 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 if(leer.equals("")){
-                                    ttsManager.addQueue("Lo lamento. No hay registros similares en la base de datos");
-                                    ttsManager.addQueue("¿Algo más qué quieras hacer?");
+                                    hablando("Lo lamento. No hay registros similares en la " +
+                                            "base de datos. ¿Algo más qué quieras hacer?", 0, false);
                                 }else{
-                                    ttsManager.addQueue("Listo. ¿Qué más quieres hacer?");
+                                    hablando("Listo. ¿Qué más quieres hacer?", 0, false);
                                 }
-
                                 respuesta.setText(mostrar.toString());
                             } else {
-                                ttsManager.addQueue("No hay datos para leer");
+                                hablando("No hay datos en la base de datos", 0, false);
                             }
                             puedeAgradecer = true;
                             resetearDatos("");
@@ -1619,13 +1407,13 @@ public class MainActivity extends AppCompatActivity {
      * @param c Objeto del comando del que se van a guardar los datos en la base de datos
      * @throws InterruptedException Es para tener control por si ocurre alguna excepción
      */
-    public void pedirConfirmacion(Comandos c) throws InterruptedException {
+    public void pedirConfirmacion(Comando c) throws InterruptedException {
         if (esperarConfirmacion) {
             llamadoComando(c.getNumeroComando(), c, "");
         } else {
-            ttsManager.addQueue("Confirma para subir los siguientes datos:");
+            hablando("Confirma para subir los siguientes datos: ", 0, false);
             for (int i = 0; i < c.getDatosInsertarBaseDatos().length; i++) {
-                ttsManager.addQueue(c.getDatosInsertarBaseDatos()[i] + ".");
+                hablando(c.getDatosInsertarBaseDatos()[i] + ".", 0, false);
             }
             hablando("", 1000, true);
             esperarConfirmacion = true;
@@ -1665,5 +1453,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         ttsManager.shutDown();
     }
-
 }

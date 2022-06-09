@@ -18,7 +18,11 @@
       <w>comunica</w>
       <w>continúa</w>
       <w>cortos</w>
+      <w>cuentame</w>
+      <w>cuente</w>
+      <w>decirte</w>
       <w>desactiva</w>
+      <w>dije</w>
       <w>elimina</w>
       <w>encontré</w>
       <w>equipo</w>
@@ -26,19 +30,26 @@
       <w>estos</w>
       <w>estoy</w>
       <w>exito</w>
+      <w>había</w>
+      <w>hace</w>
       <w>independientemente</w>
       <w>insertado</w>
       <w>interactúo</w>
       <w>lamento</w>
       <w>namethingstobuy</w>
       <w>necesitas</w>
+      <w>número</w>
       <w>obtenida</w>
+      <w>ocurrido</w>
       <w>pague</w>
       <w>parcialmente</w>
       <w>procedimientos</w>
       <w>realizan</w>
       <w>recopilando</w>
       <w>reestablece</w>
+      <w>repetir</w>
+      <w>repita</w>
+      <w>repite</w>
       <w>resetea</w>
       <w>resto</w>
       <w>seguir</w>
@@ -51,6 +62,8 @@
       <w>tenian</w>
       <w>termine</w>
       <w>trabajo</w>
+      <w>volveré</w>
+      <w>último</w>
     </words>
   </dictionary>
 </component>

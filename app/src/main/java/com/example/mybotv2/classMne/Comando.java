@@ -3,7 +3,7 @@ package com.example.mybotv2.classMne;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Comandos {
+public class Comando {
 
     private int numeroComando; //El identificador del comando
     private String[] comando; //Palabras claves para llamar el comando
@@ -22,7 +22,7 @@ public class Comandos {
     /**
      * Constructor vacío para el manejo temprano de los objetos
      */
-    public Comandos() { }
+    public Comando() { }
 
     /**
      * Sobrecarga del constructor de la clase para el almacenamiento de la información de los
@@ -31,7 +31,7 @@ public class Comandos {
      * @param comando Las palabras claves para llamar al comando
      * @param descripcion La descripción del comando
      */
-    public Comandos(int numeroComando, String[] comando, String descripcion) {
+    public Comando(int numeroComando, String[] comando, String descripcion) {
         this.numeroComando = numeroComando;
         this.comando = comando;
         this.descripcion = descripcion;
@@ -49,9 +49,9 @@ public class Comandos {
      * @param rutas Las rutas del backend para acceder a cada base de datos
      * @param datosLeerBaseDatos Los datos que se leyeron de la base de datos
      */
-    public Comandos(int numeroComando, String[] comando, String descripcion,
-                    String[] datosInsertarBaseDatos, String[] rutas,
-                    String[] datosLeerBaseDatos, String nombreBaseDatos) {
+    public Comando(int numeroComando, String[] comando, String descripcion,
+                   String[] datosInsertarBaseDatos, String[] rutas,
+                   String[] datosLeerBaseDatos, String nombreBaseDatos) {
         this.numeroComando = numeroComando;
         this.comando = comando;
         this.descripcion = descripcion;
