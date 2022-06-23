@@ -34,6 +34,8 @@ public class Constants {
     public final static String URL_CURIOS_DATA_SELECT = URL_WEB_SERVICE + "curious_data_SELECT.php";
     public final static String URL_SHORTJOKE_INSERT = URL_WEB_SERVICE + "shortJoke_INSERT.php";
     public final static String URL_SHORTJOKE_SELECT = URL_WEB_SERVICE + "shortJoke_SELECT.php";
+    public final static String URL_SAVERANDOMINFO_INSERT = URL_WEB_SERVICE + "saveRandomInfo_INSERT.php";
+    public final static String URL_SAVERANDOMINFO_SELECT = URL_WEB_SERVICE + "saveRandomInfo_SELECT.php";
 
     public static ArrayList<String> agradecimientos = new ArrayList<>();
     public static ArrayList<String> agradecimientosBot = new ArrayList<>();
@@ -227,16 +229,14 @@ public class Constants {
         listaComandos.add(new Comando(17,
                 new String[]{"busca", "buscar"},
                 "Si dices la palabra buscar podrás consultar una base de datos de tu " +
-                        "elección y buscar un dato en específico"
-        ));
+                        "elección y buscar un dato en específico"));
 
         listaComandos.add(new Comando(18,
                 new String[]{"deletreo", "deletrear", "activar deletreo", "desactivar deletreo",
                         "deletrea"},
                 "Si dices activar deletreo, comenzará el protocolo que te permite formar " +
                         "oraciones deletreando y diciendo desactivar deletreo, apagarás el protocolo y podrás " +
-                        "hablarme normal"
-        ));
+                        "hablarme normal"));
 
         listaComandos.add(new Comando(19,
                 new String[]{"curioso", "curios", "dato curioso"},
@@ -245,8 +245,7 @@ public class Constants {
                 new String[]{"dato", ""},
                 new String[]{Constants.URL_CURIOS_DATA_INSERT, Constants.URL_CURIOS_DATA_SELECT},
                 new String[]{"curiousdata", ""},
-                "datos curiosos"
-        ));
+                "datos curiosos"));
 
         listaComandos.add(new Comando(20,
                 new String[]{"chiste", "chistes"},
@@ -254,14 +253,22 @@ public class Constants {
                 new String[]{"chiste", ""},
                 new String[]{Constants.URL_SHORTJOKE_INSERT, Constants.URL_SHORTJOKE_SELECT},
                 new String[]{"shortjoke", ""},
-                "chistes"
-        ));
+                "chistes"));
 
         listaComandos.add(new Comando(21,
                 new String[]{"repetir", "repite", "repite eso"},
                 "Si dices repetir, volveré a decirte lo último que ya te había dicho"));
 
-        //proyectos actuales, cosas por hacer
+        listaComandos.add(new Comando(22,
+                new String[]{"recordar", "recuerda", "recuerda esto"},
+                "Si quieres que recuerde alguna información sobre cualquier cosa solo" +
+                        " di 'recuerdame esto'",
+                new String[]{"descripción", ""},
+                new String[]{Constants.URL_SAVERANDOMINFO_INSERT, Constants.URL_SAVERANDOMINFO_SELECT},
+                new String[]{"description", ""},
+                "cosas por recordar"));
+
+        //proyectos actuales
         //Guardar actividades para realizar con fecha, tipo calendario, dato random
     }
 

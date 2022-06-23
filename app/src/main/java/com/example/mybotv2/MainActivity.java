@@ -665,6 +665,9 @@ public class MainActivity extends AppCompatActivity {
             case 21:
                 comandoRepetir();
                 break;
+            case 22:
+                comandoRecordar(comando);
+                break;
 
                 /*Si no coincide con ninguno de los comandos y no es una despedida entonces pide
                 repetirlo otra vez y si vuelve a decir lo mismo entonces da un mensaje diferente
@@ -758,10 +761,10 @@ public class MainActivity extends AppCompatActivity {
                 if (hora <= 18) {
                     horaCompleta = hora != 13 ? "Son las " + (hora - 12) + " y " + minuto + " de la tarde" : "Son la una y " + minuto + " de la tarde";
                 } else {
-                    if(hora < 24){
+                    if(hora <= 23){
                         horaCompleta = "Son las " + (hora - 12) + " y " + minuto + " de la noche";
                     }else{
-                        horaCompleta = "Son las " + (hora - 12) + " y " + minuto + " de la madrugada";
+                        if(hora == 24) horaCompleta = "Son las " + 12 + " y " + minuto + " de la madrugada";
                     }
                 }
             }
@@ -879,7 +882,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * El metodo sirve para pedir datos y guardar en la base de datos una nueva cosa por hacer
-     * @param c El comando cosas TODO
+     * @param c El comando cosas TO-DO
      */
     private void comandoCosasToDo(Comando c) {
         //String dia = tomarDiaSeleccionado(texto);
@@ -1107,6 +1110,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void comandoRepetir(){
         hablando(ultimaRespuestaBot, 1000, false);
+    }
+
+    /**
+     * Método para agregar cosas a recordar en la base de datos
+     * @param c Comando recordar
+     */
+    private void comandoRecordar(Comando c){
+        solicitarDatosNecesarios(c);
+        if(c.getDatosInsertarBaseDatos()[c.getDatosInsertarBaseDatos().length - 1].length() != 0 && c.getEnProgreso()){
+            Map <String, String> datos = new HashMap<>();
+            datos.put("description", c.getDatosInsertarBaseDatos()[1]);
+            recordGeneral(datos, c);
+        }
     }
 
     /**
